@@ -23,5 +23,7 @@ local.properties
 # .settings/
 
 # IntelliJ project files 
-.idea/
+workspace.xml
+tasks.xml
+*.iws
 
