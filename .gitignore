@@ -18,6 +18,6 @@ gen/
 local.properties
 
 # Eclipse project files
-.classpath
-.project
-.settings/
+# .classpath
+# .project
+# .settings/
