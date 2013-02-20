@@ -26,4 +26,4 @@ local.properties
 workspace.xml
 tasks.xml
 *.iws
-
+misc.xml
