@@ -1,11 +1,9 @@
 package zhang.abel.memmo.android;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import zhang.abel.imemory.android.R;
 
 public class MainActivity extends Activity
 {
