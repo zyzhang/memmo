@@ -22,4 +22,11 @@ public class MainActivity extends Activity
         textView.setText("成功了");
         setContentView(textView);
     }
+
+    public void CheckMe(View view){
+        TextView textView = new TextView(this);
+        textView.setTextSize(40);
+        textView.setText("我们一直在成功！");
+        setContentView(textView);
+    }
 }
