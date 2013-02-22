@@ -7,18 +7,13 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World, MainActivity"
+        android:text="@string/no_album_text"
     />
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button"
-            android:onClick="clickMe"/>
-    <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Not Important!!"
-            android:id="@+id/checkBox" android:layout_gravity="left|center_vertical" android:checked="false"
-            android:onClick="CheckMe"/>
+            android:text="@string/create_album_button"
+            android:onClick="createAlbum"/>
+
 </LinearLayout>
 
