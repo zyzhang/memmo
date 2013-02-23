@@ -3,6 +3,7 @@ package zhang.abel.memmo.android;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -12,16 +13,14 @@ import java.io.File;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class MainActivity extends Activity
-{
+public class MainActivity extends Activity {
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
 
-    public void createAlbum(View view){
+    public void createAlbum(View view) {
         final EditText albumName = new EditText(this);
         new AlertDialog.Builder(this)
                 .setTitle("新建记忆相册")
@@ -38,10 +37,11 @@ public class MainActivity extends Activity
                             if (!folderPath.exists()) {
                                 folderPath.mkdir();
                             }
-                        }else{
+                        } else {
                             //write the internal storage directory.
                         }
-
+                        Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
+                        startActivityForResult(intent, 0);
                     }
                 })
                 .setNegativeButton("取消", null)
