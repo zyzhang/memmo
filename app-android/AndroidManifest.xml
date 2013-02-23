@@ -12,5 +12,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AlbumActivity"/>
+
     </application>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>
