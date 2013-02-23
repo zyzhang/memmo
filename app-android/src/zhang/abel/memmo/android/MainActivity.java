@@ -2,9 +2,15 @@ package zhang.abel.memmo.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.EditText;
+
+import java.io.File;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends Activity
 {
@@ -16,11 +22,23 @@ public class MainActivity extends Activity
     }
 
     public void createAlbum(View view){
+        final EditText albumName = new EditText(this);
         new AlertDialog.Builder(this)
                 .setTitle("新建记忆相册")
                 .setIcon(android.R.drawable.ic_dialog_info)
-                .setView(new EditText(this))
-                .setPositiveButton("好了", null)
+                .setView(albumName)
+                .setPositiveButton("好了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String path = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+                        String folderName = String.valueOf(albumName.getText());
+                        File folderPath = new File(path + File.separator + folderName);
+
+                        if (!folderPath.exists()) {
+                            folderPath.mkdir();
+                        }
+                    }
+                })
                 .setNegativeButton("取消", null)
                 .show();
     }
