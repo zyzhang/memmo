@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import zhang.abel.memmo.android.entities.Album;
+import zhang.abel.memmo.android.repositories.AlbumRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
 import java.io.File;
@@ -22,8 +21,12 @@ import java.util.Date;
 
 public class AlbumActivity extends Activity {
 
+    // temp name, it should be already created before.
+    private final String albumName = "memmo";
+
     private static final int ACTION_TAKE_PHOTO_B = 1;
 
+    private AlbumRepository albumRepository;
 
     private static final String BITMAP_STORAGE_KEY = "viewbitmap";
     private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
@@ -35,8 +38,6 @@ public class AlbumActivity extends Activity {
 
     private ImageView imageView;
     private Bitmap mImageBitmap;
-
-    private AlbumStorageDirFactory mAlbumStorageDirFactory;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +52,8 @@ public class AlbumActivity extends Activity {
                 MediaStore.ACTION_IMAGE_CAPTURE
         );
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            mAlbumStorageDirFactory = new FroyoAlbumDirFactory();
-        } else {
-            mAlbumStorageDirFactory = new BaseAlbumDirFactory();
-        }
+        albumRepository = new AlbumRepository();
+
     }
 
     @Override
@@ -188,37 +186,19 @@ public class AlbumActivity extends Activity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbumDir();
+        File albumF = getAlbum().getDirectory();
         File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
         return imageF;
     }
 
+    private Album getAlbum() {
+        Album album = albumRepository.get(albumName);
 
-    private File getAlbumDir() {
-        File storageDir = null;
-
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-            storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
-            if (storageDir != null) {
-                if (! storageDir.mkdirs()) {
-                    if (! storageDir.exists()){
-                        Log.d("CameraSample", "failed to create directory");
-                        return null;
-                    }
-                }
-            }
-
-        } else {
-            Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
+        // TODO the album should be already created
+        if (album == null) {
+            album = albumRepository.create(albumName);
         }
-
-        return storageDir;
-    }
-
-    private String getAlbumName() {
-        return "memmo";
+        return album;
     }
 
     private void setBtnListenerOrDisable(
