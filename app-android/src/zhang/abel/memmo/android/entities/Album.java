@@ -9,6 +9,10 @@ public class Album {
         this.directory = directory;
     }
 
+    public Picture addNewPicture() {
+        return new Picture(this);
+    }
+
     public File getDirectory() {
         return directory;
     }

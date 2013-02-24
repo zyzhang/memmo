@@ -11,13 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import zhang.abel.memmo.android.entities.Album;
+import zhang.abel.memmo.android.entities.Picture;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
+import zhang.abel.memmo.android.repositories.PictureRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AlbumActivity extends Activity {
 
@@ -27,14 +26,12 @@ public class AlbumActivity extends Activity {
     private static final int ACTION_TAKE_PHOTO_B = 1;
 
     private AlbumRepository albumRepository;
+    private PictureRepository pictureRepository;
 
     private static final String BITMAP_STORAGE_KEY = "viewbitmap";
     private static final String IMAGEVIEW_VISIBILITY_STORAGE_KEY = "imageviewvisibility";
 
-    private String mCurrentPhotoPath;
-
-    private static final String JPEG_FILE_PREFIX = "IMG_";
-    private static final String JPEG_FILE_SUFFIX = ".jpg";
+    private Picture currentPicture;
 
     private ImageView imageView;
     private Bitmap mImageBitmap;
@@ -48,22 +45,26 @@ public class AlbumActivity extends Activity {
         Button btnTakePicView = (Button) findViewById(R.id.btn_take_pic);
         setBtnListenerOrDisable(
                 btnTakePicView,
-                mTakePicOnClickListener,
+                new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
+                    }
+                },
                 MediaStore.ACTION_IMAGE_CAPTURE
         );
 
         albumRepository = new AlbumRepository();
+        pictureRepository = new PictureRepository();
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ACTION_TAKE_PHOTO_B: {
-                if (resultCode == RESULT_OK) {
-                    handleBigCameraPhoto();
-                }
-                break;
+        if (requestCode == ACTION_TAKE_PHOTO_B) {
+            if (resultCode == RESULT_OK) {
+                setPic(imageView, currentPicture);
+                galleryAddPic(currentPicture);
             }
         }
     }
@@ -72,7 +73,7 @@ public class AlbumActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(BITMAP_STORAGE_KEY, mImageBitmap);
-        outState.putBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY, (mImageBitmap != null) );
+        outState.putBoolean(IMAGEVIEW_VISIBILITY_STORAGE_KEY, (mImageBitmap != null));
         super.onSaveInstanceState(outState);
     }
 
@@ -87,28 +88,17 @@ public class AlbumActivity extends Activity {
         );
     }
 
-    private void handleBigCameraPhoto() {
-
-        if (mCurrentPhotoPath != null) {
-            setPic();
-            galleryAddPic();
-            mCurrentPhotoPath = null;
-        }
-
-    }
-
-    private void galleryAddPic() {
+    private void galleryAddPic(Picture currentPicture) {
         Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
+        Uri contentUri = currentPicture.getUri();
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic() {
+    private void setPic(ImageView imageView, Picture currentPicture) {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
-		/* So pre-scale the target bitmap into which the file is decoded */
+        /* So pre-scale the target bitmap into which the file is decoded */
 
 		/* Get the size of the ImageView */
         int targetW = imageView.getWidth();
@@ -117,14 +107,14 @@ public class AlbumActivity extends Activity {
 		/* Get the size of the image */
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        BitmapFactory.decodeFile(currentPicture.getFile().getAbsolutePath(), bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
 		/* Figure out which way needs to be reduced less */
         int scaleFactor = 1;
         if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
         }
 
 		/* Set bitmap options to scale the image decode target */
@@ -133,62 +123,35 @@ public class AlbumActivity extends Activity {
         bmOptions.inPurgeable = true;
 
 		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPicture.getFile().getAbsolutePath(), bmOptions);
 
 		/* Associate the Bitmap to the ImageView */
         imageView.setImageBitmap(bitmap);
         imageView.setVisibility(View.VISIBLE);
     }
 
-    Button.OnClickListener mTakePicOnClickListener =
-            new Button.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dispatchTakePictureIntent(ACTION_TAKE_PHOTO_B);
-                }
-            };
-
     private void dispatchTakePictureIntent(int actionCode) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        switch(actionCode) {
+        switch (actionCode) {
             case ACTION_TAKE_PHOTO_B:
-                File f = null;
-
                 try {
-                    f = setUpPhotoFile();
-                    mCurrentPhotoPath = f.getAbsolutePath();
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    Album album = getAlbum();
+                    currentPicture = album.addNewPicture();
+                    pictureRepository.save(currentPicture);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPicture.getUri());
+
                 } catch (IOException e) {
                     e.printStackTrace();
-                    f = null;
-                    mCurrentPhotoPath = null;
+                    currentPicture = null;
                 }
                 break;
 
             default:
                 break;
-        } // switch
+        }
 
         startActivityForResult(takePictureIntent, actionCode);
-    }
-
-    private File setUpPhotoFile() throws IOException {
-
-        File f = createImageFile();
-        mCurrentPhotoPath = f.getAbsolutePath();
-
-        return f;
-    }
-
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-        File albumF = getAlbum().getDirectory();
-        File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-        return imageF;
     }
 
     private Album getAlbum() {
