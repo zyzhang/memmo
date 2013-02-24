@@ -48,6 +48,11 @@ public class MainActivity extends Activity {
                 .show();
     }
 
+    public void onClickToAlbum(View view) {
+        Intent intent = new Intent(MainActivity.this, AlbumActivity.class);
+        startActivity(intent);
+    }
+
     private static boolean hasSDCard() {
         String status = Environment.getExternalStorageState();
         return status.equals(Environment.MEDIA_MOUNTED);
