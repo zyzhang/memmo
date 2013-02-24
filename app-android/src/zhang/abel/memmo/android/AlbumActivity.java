@@ -1,13 +1,9 @@
 package zhang.abel.memmo.android;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,12 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import zhang.abel.memmo.android.utils.IntentUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class AlbumActivity extends Activity {
 
@@ -70,7 +66,7 @@ public class AlbumActivity extends Activity {
                     handleBigCameraPhoto();
                 }
                 break;
-            } // ACTION_TAKE_PHOTO_B
+            }
         }
     }
 
@@ -82,7 +78,6 @@ public class AlbumActivity extends Activity {
         super.onSaveInstanceState(outState);
     }
 
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -93,8 +88,6 @@ public class AlbumActivity extends Activity {
                         ImageView.VISIBLE : ImageView.INVISIBLE
         );
     }
-
-
 
     private void handleBigCameraPhoto() {
 
@@ -228,19 +221,12 @@ public class AlbumActivity extends Activity {
         return "memmo";
     }
 
-    public static boolean isIntentAvailable(Context context, String action) {
-        final PackageManager packageManager = context.getPackageManager();
-        final Intent intent = new Intent(action);
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return !list.isEmpty();
-    }
-
     private void setBtnListenerOrDisable(
             Button btn,
             Button.OnClickListener onClickListener,
             String intentName
     ) {
-        if (isIntentAvailable(this, intentName)) {
+        if (IntentUtils.isIntentAvailable(this, intentName)) {
             btn.setOnClickListener(onClickListener);
         } else {
             btn.setText(getText(R.string.cannot).toString() + " " + btn.getText());
