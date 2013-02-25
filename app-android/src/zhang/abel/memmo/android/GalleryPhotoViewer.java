@@ -22,25 +22,21 @@ public class GalleryPhotoViewer extends Activity implements ViewSwitcher.ViewFac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photoscan);
 
-        System.out.println("blablabla........");
         photoList = readFileList();
     }
 
     private List<String> readFileList() {
         List<String> fileList = new ArrayList<String>();
-        System.out.println("blablaPath:=====" + imagePath);
+
         File fileDir = new File(imagePath);
         File[] files = fileDir.listFiles();
 
-        System.out.println("blablafiles: " + files.length);
         if(files != null){
             for(File file : files){
-                System.out.println("blablaFileName: " + file.getName());
                 String fileName = file.getName();
                 if(fileName.lastIndexOf(".") > 0
                         && fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).equals("jpg")){
                     fileList.add(file.getPath());
-                    System.out.println("=======" + file.getPath());
                 }
             }
         }
