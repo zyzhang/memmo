@@ -14,9 +14,9 @@ public class AlbumListActivity extends Activity {
     private void loadAlbums()
     {
         new AlertDialog.Builder(this)
-                .setTitle("loding.")
+                .setTitle("loading.")
                 .setIcon(android.R.drawable.ic_dialog_info)
-                .setNegativeButton("cacel", null)
+                .setNegativeButton("Ok", null)
                 .show();
     }
 }
