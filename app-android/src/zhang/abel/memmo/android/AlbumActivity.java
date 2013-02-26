@@ -3,8 +3,6 @@ package zhang.abel.memmo.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -14,6 +12,7 @@ import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 import zhang.abel.memmo.android.repositories.PictureRepository;
+import zhang.abel.memmo.android.utils.BitmapUtils;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
 import java.io.IOException;
@@ -63,8 +62,8 @@ public class AlbumActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ACTION_TAKE_PHOTO_B) {
             if (resultCode == RESULT_OK) {
-                setPic(imageView, currentPicture);
-                galleryAddPic(currentPicture);
+                displayPicture(imageView, currentPicture);
+                addPictureToGallery(currentPicture);
             }
         }
     }
@@ -88,42 +87,18 @@ public class AlbumActivity extends Activity {
         );
     }
 
-    private void galleryAddPic(Picture currentPicture) {
+    private void addPictureToGallery(Picture picture) {
         Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        Uri contentUri = currentPicture.getUri();
-        mediaScanIntent.setData(contentUri);
+        mediaScanIntent.setData(picture.getUri());
         this.sendBroadcast(mediaScanIntent);
     }
 
-    private void setPic(ImageView imageView, Picture currentPicture) {
+    private void displayPicture(ImageView imageView, Picture picture) {
 
 		/* There isn't enough memory to open up more than a couple camera photos */
         /* So pre-scale the target bitmap into which the file is decoded */
 
-		/* Get the size of the ImageView */
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-		/* Get the size of the image */
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(currentPicture.getFile().getAbsolutePath(), bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-		/* Figure out which way needs to be reduced less */
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-        }
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPicture.getFile().getAbsolutePath(), bmOptions);
+        Bitmap bitmap = BitmapUtils.loadAsBitmap(picture, imageView.getWidth(), imageView.getHeight());
 
 		/* Associate the Bitmap to the ImageView */
         imageView.setImageBitmap(bitmap);
@@ -131,27 +106,21 @@ public class AlbumActivity extends Activity {
     }
 
     private void dispatchTakePictureIntent(int actionCode) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (actionCode == ACTION_TAKE_PHOTO_B) {
+            try {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Album album = getAlbum();
+                currentPicture = album.addNewPicture();
+                pictureRepository.save(currentPicture);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPicture.getUri());
 
-        switch (actionCode) {
-            case ACTION_TAKE_PHOTO_B:
-                try {
-                    Album album = getAlbum();
-                    currentPicture = album.addNewPicture();
-                    pictureRepository.save(currentPicture);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPicture.getUri());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    currentPicture = null;
-                }
-                break;
-
-            default:
-                break;
+                startActivityForResult(takePictureIntent, actionCode);
+            } catch (IOException e) {
+                e.printStackTrace();
+                currentPicture = null;
+            }
         }
 
-        startActivityForResult(takePictureIntent, actionCode);
     }
 
     private Album getAlbum() {
