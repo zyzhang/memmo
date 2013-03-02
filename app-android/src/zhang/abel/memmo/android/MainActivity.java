@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
+import zhang.abel.memmo.android.entities.Album;
+import zhang.abel.memmo.android.repositories.AlbumRepository;
 
 import java.io.File;
 import java.util.Calendar;
@@ -16,7 +18,9 @@ import java.util.Calendar;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class MainActivity extends Activity {
+
     private static int NOTIFICATION_ID = 1;
+    AlbumRepository albumRepository = new AlbumRepository();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,19 +37,15 @@ public class MainActivity extends Activity {
                 .setPositiveButton("好了", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (hasSDCard()) {
-                            String path = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-                            String folderName = String.valueOf(albumName.getText());
-                            File folderPath = new File(path + File.separator + folderName);
+                        String folderName = String.valueOf(albumName.getText());
+                        if (!folderName.isEmpty()) {
+                            Album newAlbum = albumRepository.create(folderName);
+                            String dirPath = newAlbum.getDirectory().getParent().toString();
 
-                            if (!folderPath.exists()) {
-                                folderPath.mkdir();
-                            }
-                        } else {
-                            //write the internal storage directory.
+                            Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
+                            intent.putExtra("dirPath",dirPath);
+                            startActivity(intent);
                         }
-                        Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
-                        startActivityForResult(intent, 0);
                     }
                 })
                 .setNegativeButton("取消", null)
@@ -87,10 +87,5 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, NotificationActivity.class);
         intent.putExtra("notificationId", NOTIFICATION_ID);
         return PendingIntent.getActivity(this, 0, intent, 0);
-    }
-
-    private static boolean hasSDCard() {
-        String status = Environment.getExternalStorageState();
-        return status.equals(Environment.MEDIA_MOUNTED);
     }
 }
