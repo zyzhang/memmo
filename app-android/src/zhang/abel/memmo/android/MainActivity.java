@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
 
     private PendingIntent onNotificationClicked() {
         Intent intent = new Intent(this, NotificationActivity.class);
-        intent.putExtra("NOTIFICATION_ID", NOTIFICATION_ID);
+        intent.putExtra("notificationId", NOTIFICATION_ID);
         return PendingIntent.getActivity(this, 0, intent, 0);
     }
 
