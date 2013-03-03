@@ -23,5 +23,13 @@
         android:layout_gravity="center"
         android:onClick="onClickToAlbum"/>
 
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设定拍照提醒"
+            android:id="@+id/set_notification"
+            android:layout_gravity="center"
+            android:onClick="setNotification"/>
+
 </LinearLayout>
 
