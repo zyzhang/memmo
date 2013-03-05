@@ -18,6 +18,13 @@
         <activity android:name=".AlbumActivity"/>
         <activity android:name=".AlbumListActivity"/>
         <activity android:name=".NotificationActivity"/>
+        <activity android:name=".NotificationDetail"/>
+        <activity android:name=".ReminderActivity"/>
+        <receiver android:name=".ReminderReceiver">
+            <intent-filter>
+                <action android:name= "zhang.abel.memmo.android.ReminderReceiver" />
+            </intent-filter>
+        </receiver>
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-feature android:name="android.hardware.camera" />
