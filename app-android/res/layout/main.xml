@@ -31,5 +31,13 @@
             android:layout_gravity="center"
             android:onClick="setReminder"/>
 
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="相册列表"
+            android:id="@+id/albumlist"
+            android:layout_gravity="center"
+            android:onClick="listAlbums"/>
+
 </LinearLayout>
 

@@ -1,7 +1,6 @@
 package zhang.abel.memmo.android;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.*;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,8 +47,46 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+
     public void setReminder(View view) {
         Intent intent = new Intent(this, ReminderActivity.class);
         startActivity(intent);
     }
+
+    public void listAlbums(View view) {
+        Intent intent = new Intent(MainActivity.this, AlbumListView.class);
+        startActivity(intent);
+    }
+
+//    public void setNotification(View view) {
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        Notification notification = buildNotification();
+//        notificationManager.notify(NOTIFICATION_ID, notification);
+////TODO:
+//// 1. will using alarm to set repeating notification
+//// 2. will allow user to set custom alarm time
+//
+////        Calendar calendar = Calendar.getInstance();
+////        calendar.set(Calendar.HOUR_OF_DAY, 11);
+////        calendar.set(Calendar.MINUTE, 34);
+////        calendar.set(Calendar.SECOND, 00);
+////        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+////        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 5*1000, pendingIntent);
+//    }
+
+//    private Notification buildNotification() {
+//        return new Notification.Builder(this)
+//                    .setContentTitle("提醒")
+//                    .setContentText("拍照啦！")
+//                    .setSmallIcon(R.drawable.ic_launcher)
+//                    .setSound(Uri.withAppendedPath(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, "20"))
+//                    .setContentIntent(onNotificationClicked())
+//                    .build();
+//    }
+
+//    private PendingIntent onNotificationClicked() {
+//        Intent intent = new Intent(this, NotificationActivity.class);
+//        intent.putExtra("notificationId", NOTIFICATION_ID);
+//        return PendingIntent.getActivity(this, 0, intent, 0);
+//    }
 }
