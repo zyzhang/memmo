@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AlbumListActivity extends Activity {
     String dirPath;
@@ -25,14 +29,10 @@ public class AlbumListActivity extends Activity {
                     Thread.sleep(5000);
                     dialog.dismiss();
                     if (!dirPath.isEmpty()) {
-                        File[] files = new File(dirPath).listFiles();
-                        StringBuilder sb = new StringBuilder();
-                        for (File aFile : files)
-                            if (aFile.isDirectory()) {
-                                sb.append(aFile.getName());
-                                sb.append("*");
-                            }
-                        sb.toString();
+
+                        Intent intent = new Intent(AlbumListActivity.this, AlbumListView.class);
+                        intent.putExtra("dirPath",dirPath);
+                        startActivity(intent);
                     }
 
                 }catch (InterruptedException e){

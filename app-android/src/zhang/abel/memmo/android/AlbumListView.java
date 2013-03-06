@@ -1,5 +1,7 @@
 package zhang.abel.memmo.android;
 
+import java.io.File;
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +11,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,12 +29,31 @@ public class AlbumListView extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        albumData = getData();
+        Intent intent1 = getIntent();
+        if (intent1.getStringExtra("dirPath")!=null){
+
+            String dirPath = intent1.getStringExtra("dirPath");
+            File[] files = new File(dirPath).listFiles();
+            List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+            for (File aFile : files)
+                if (aFile.isDirectory()) {
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("title", aFile.getName());
+                    map.put("info", aFile.getName());
+                    map.put("img", R.drawable.ic_launcher);
+                    list.add(map);
+                }
+            albumData = list;
+        }else{
+            albumData = getData();
+        }
+
+
         AlbumListAdapter adapter = new AlbumListAdapter(this);
         setListAdapter(adapter);
     }
 
-    private List<Map<String, Object>> getData() {
+    protected List<Map<String, Object>> getData() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -113,7 +135,6 @@ public class AlbumListView extends ListActivity {
             if (convertView == null) {
 
                 holder=new ViewHolder();
-
                 convertView = mInflater.inflate(R.layout.albumlistview, null);
                 holder.img = (ImageView)convertView.findViewById(R.id.img);
                 holder.title = (TextView)convertView.findViewById(R.id.title);
