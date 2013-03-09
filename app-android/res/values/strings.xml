@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">萌好瞬间</string>
-    <string name="no_album_text">还没有任何记忆相册哦</string>
+    <string name="no_album_text">还没有任何记忆相册哦！</string>
     <string name="create_album_button">马上建一个！</string>
+    <string name="album_list_button">相册列表！</string>
+    <string name="set_notification_button">设定拍照提醒！</string>
     <string name="take_picture">Take a Picture</string>
     <string name="cannot">CANNOT</string>
+
 </resources>

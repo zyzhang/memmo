@@ -1,30 +1,21 @@
 package zhang.abel.memmo.android;
 
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
+import zhang.abel.memmo.android.adapters.AlbumListAdapter;
+
 import java.io.File;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-
 public class AlbumListView extends ListActivity {
-    private List<Map<String, Object>> albumData;
+    private List<Map<String, Object>> albumList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,22 +25,20 @@ public class AlbumListView extends ListActivity {
 
             String dirPath = intent1.getStringExtra("dirPath");
             File[] files = new File(dirPath).listFiles();
-            List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+            List<Map<String, Object>> albumList = new ArrayList<Map<String, Object>>();
             for (File aFile : files)
                 if (aFile.isDirectory()) {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("title", aFile.getName());
                     map.put("info", aFile.getName());
                     map.put("img", R.drawable.ic_launcher);
-                    list.add(map);
+                    albumList.add(map);
                 }
-            albumData = list;
+            this.albumList = albumList;
         }else{
-            albumData = getData();
+            albumList = getData();
         }
-
-
-        AlbumListAdapter adapter = new AlbumListAdapter(this);
+        AlbumListAdapter adapter = new AlbumListAdapter(this,albumList);
         setListAdapter(adapter);
     }
 
@@ -79,85 +68,6 @@ public class AlbumListView extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-
-        Log.v("AlbumListView-click", (String) albumData.get(position).get("title"));
-    }
-
-    public void showInfo(){
-        new AlertDialog.Builder(this)
-                .setTitle("listview")
-                .setMessage("...")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    public final class ViewHolder{
-        public ImageView img;
-        public TextView title;
-        public TextView info;
-        public Button viewBtn;
-    }
-
-    public class AlbumListAdapter extends BaseAdapter{
-
-        private LayoutInflater mInflater;
-
-
-        public AlbumListAdapter(Context context){
-            this.mInflater = LayoutInflater.from(context);
-        }
-        @Override
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return albumData.size();
-        }
-
-        @Override
-        public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public long getItemId(int arg0) {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder = null;
-            if (convertView == null) {
-
-                holder=new ViewHolder();
-                convertView = mInflater.inflate(R.layout.albumlistview, null);
-                holder.img = (ImageView)convertView.findViewById(R.id.img);
-                holder.title = (TextView)convertView.findViewById(R.id.title);
-                holder.info = (TextView)convertView.findViewById(R.id.info);
-                holder.viewBtn = (Button)convertView.findViewById(R.id.view_btn);
-                convertView.setTag(holder);
-            }else {
-                holder = (ViewHolder)convertView.getTag();
-            }
-
-            holder.img.setBackgroundResource((Integer) albumData.get(position).get("img"));
-            holder.title.setText((String) albumData.get(position).get("title"));
-            holder.info.setText((String) albumData.get(position).get("info"));
-
-            holder.viewBtn.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    showInfo();
-                }
-            });
-
-            return convertView;
-        }
+        Log.v("AlbumListView-click", (String) albumList.get(position).get("title"));
     }
 }

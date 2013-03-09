@@ -57,5 +57,4 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(MainActivity.this, AlbumListView.class);
         startActivity(intent);
     }
-
 }
