@@ -31,8 +31,8 @@ public class ReminderActivity extends Activity {
 
     private Calendar getDefaultReminderTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.HOUR_OF_DAY, 06);
+        calendar.set(Calendar.MINUTE, 26);
         calendar.set(Calendar.SECOND, 00);
         return calendar;
     }

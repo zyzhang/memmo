@@ -5,12 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class AlbumListActivity extends Activity {
     String dirPath;
     public void onCreate(Bundle savedInstanceState) {
@@ -29,9 +23,8 @@ public class AlbumListActivity extends Activity {
                     Thread.sleep(5000);
                     dialog.dismiss();
                     if (!dirPath.isEmpty()) {
-
                         Intent intent = new Intent(AlbumListActivity.this, AlbumListView.class);
-                        intent.putExtra("dirPath",dirPath);
+                        intent.putExtra("dirPath", dirPath);
                         startActivity(intent);
                     }
 
