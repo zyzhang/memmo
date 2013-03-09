@@ -49,23 +49,23 @@ public class AlbumListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        AlbumListItem holder = null;
-        if (convertView == null) {
+        AlbumListItem item = null;
 
-            holder=new AlbumListItem();
-            convertView = mInflater.inflate(R.layout.albumlistview, null);
-            holder.img = (ImageView)convertView.findViewById(R.id.img);
-            holder.title = (TextView)convertView.findViewById(R.id.title);
-            holder.info = (TextView)convertView.findViewById(R.id.info);
-            holder.viewBtn = (Button)convertView.findViewById(R.id.view_btn);
-            convertView.setTag(holder);
+        if (convertView == null) {
+            item = new AlbumListItem();
+            convertView = mInflater.inflate(R.layout.newmain, null);
+            item.img = (ImageView)convertView.findViewById(R.id.img);
+            item.title = (TextView)convertView.findViewById(R.id.title);
+            item.info = (TextView)convertView.findViewById(R.id.info);
+
+            convertView.setTag(item);
         }else {
-            holder = (AlbumListItem)convertView.getTag();
+            item = (AlbumListItem)convertView.getTag();
         }
 
-        holder.img.setBackgroundResource((Integer) albumList.get(position).get("img"));
-        holder.title.setText((String) albumList.get(position).get("title"));
-        holder.info.setText((String) albumList.get(position).get("info"));
+        item.img.setBackgroundResource((Integer) albumList.get(position).get("img"));
+        item.title.setText((String) albumList.get(position).get("title"));
+        item.info.setText((String) albumList.get(position).get("info"));
 
         return convertView;
     }

@@ -15,4 +15,10 @@ public final class FroyoAlbumDirFactory extends AlbumStorageDirFactory {
 		  albumName
 		);
 	}
+
+    //TODO Enyu: replace the duplicate code use getAlbumStorageDirParent method
+    @Override
+    public File getAlbumStorageDirParent() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+    }
 }

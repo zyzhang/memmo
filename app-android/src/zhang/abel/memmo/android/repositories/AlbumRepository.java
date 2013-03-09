@@ -44,4 +44,12 @@ public class AlbumRepository {
         }
         return null;
     }
+
+    public Album getAlbumStorageDirParent() {
+        File storageDir = albumStorageFactory.getAlbumStorageDirParent();
+        if (storageDir.exists() && storageDir.isDirectory()) {
+            return new Album(storageDir);
+        }
+        return null;
+    }
 }
