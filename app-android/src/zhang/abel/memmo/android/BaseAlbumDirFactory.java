@@ -18,7 +18,6 @@ public final class BaseAlbumDirFactory extends AlbumStorageDirFactory {
 		);
 	}
 
-    //TODO Enyu: replace the duplicate code use getAlbumStorageDirParent method
     @Override
     public File getAlbumStorageDirParent() {
         return new File(Environment.getExternalStorageDirectory() + CAMERA_DIR);

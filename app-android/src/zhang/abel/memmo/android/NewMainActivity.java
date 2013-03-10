@@ -38,8 +38,7 @@ public class NewMainActivity extends ListActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem create = menu.add(0, 1, 0, "创建");
         MenuItem edit = menu.add(0, 2, 1, "编辑");
@@ -49,10 +48,8 @@ public class NewMainActivity extends ListActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case 1:
                 //CreateAlbum();TODO : need replace it with createablum page.
                 Intent intent = new Intent(this, NewCreateAlbumActivity.class);
