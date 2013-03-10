@@ -1,8 +1,9 @@
 package zhang.abel.memmo.android.entities;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class Album {
+public class Album implements Serializable {
     File directory;
 
     public Album(File directory) {

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NewMainActivity extends ListActivity {
+    public final static String SER_KEY = "";
     AlbumRepository albumRepository = new AlbumRepository();
     private List<Map<String, Object>> albumList;
     private Album albumParent;
@@ -94,9 +95,13 @@ public class NewMainActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        String selectedAlbumPath = (String)albumList.get(position).get("path");
-        Intent intent = new Intent(this, NewAlbumActivity.class);
-        intent.putExtra("path",selectedAlbumPath);
-        startActivity(intent);
+        File path = new File((String) albumList.get(position).get("path"));
+        Album album = new Album(path);
+
+        Intent mIntent = new Intent(this, NewAlbumActivity.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putSerializable(SER_KEY, album);
+        mIntent.putExtras(mBundle);
+        startActivity(mIntent);
     }
 }
