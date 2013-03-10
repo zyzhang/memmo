@@ -1,7 +1,6 @@
 package zhang.abel.memmo.android;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import zhang.abel.memmo.android.adapters.AlbumListAdapter;
 import zhang.abel.memmo.android.entities.Album;
@@ -32,13 +30,14 @@ public class NewMainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         dirPath = albumRepository.getAlbumStorageDirParent();
-        SetDataInAdapter();
-        setListAdapter(adapter);
+        albumList = getAlbumListItems(dirPath);
+        initAdapter(albumList, false);
 
         ActionBar actionBar = getActionBar();
         actionBar.show();
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         super.onCreateOptionsMenu(menu);
@@ -55,10 +54,9 @@ public class NewMainActivity extends ListActivity {
         switch (item.getItemId())
         {
             case 1:
-                final EditText albumName = new EditText(this);
-                CreateAlbum(albumName);
-                SetDataInAdapter();
-                adapter.notifyDataSetInvalidated();
+                //CreateAlbum();TODO : need replace it with createablum page.
+                Intent intent = new Intent(this, NewCreateAlbumActivity.class);
+                startActivity(intent);
                 return true;
             case 2:
                 return true;
@@ -67,12 +65,20 @@ public class NewMainActivity extends ListActivity {
         }
     }
 
-    private void SetDataInAdapter() {
-        albumList = getAlbumListItems(dirPath);
+    private void initAdapter(List<Map<String, Object>> albumList, boolean isRefresh) {
+        if (albumList.size() == 0) {
+            return;
+        }
         adapter = new AlbumListAdapter(this, albumList);
+        if (!isRefresh) {
+            setListAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
     }
 
-    private void CreateAlbum(final EditText albumName) {
+    private void CreateAlbum() {
+        final EditText albumName = new EditText(this);
         new AlertDialog.Builder(this)
                 .setTitle("新建记忆相册")
                 .setIcon(android.R.drawable.ic_dialog_info)
@@ -80,9 +86,11 @@ public class NewMainActivity extends ListActivity {
                 .setPositiveButton("好了", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String folderName = String.valueOf(albumName.getText());
+                        String folderName = albumName.getText().toString();
                         if (!folderName.isEmpty()) {
                             albumRepository.create(folderName);
+                            albumList = getAlbumListItems(dirPath);
+                            initAdapter(albumList, true);
                         }
                     }
                 })

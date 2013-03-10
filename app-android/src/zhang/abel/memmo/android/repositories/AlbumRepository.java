@@ -47,9 +47,9 @@ public class AlbumRepository {
 
     public Album getAlbumStorageDirParent() {
         File storageDir = albumStorageFactory.getAlbumStorageDirParent();
-        if (storageDir.exists() && storageDir.isDirectory()) {
-            return new Album(storageDir);
+        if (!storageDir.exists() || !storageDir.isDirectory()) {
+            storageDir.mkdirs();
         }
-        return null;
+        return new Album(storageDir);
     }
 }
