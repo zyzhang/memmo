@@ -2,11 +2,9 @@ package zhang.abel.memmo.android.repositories;
 
 import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
 import zhang.abel.memmo.android.AlbumStorageDirFactory;
 import zhang.abel.memmo.android.BaseAlbumDirFactory;
 import zhang.abel.memmo.android.FroyoAlbumDirFactory;
-import zhang.abel.memmo.android.R;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.exceptions.MemmoException;
 
@@ -25,9 +23,7 @@ public class AlbumRepository {
     }
 
     public Album create(String albumName) {
-        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            throw new MemmoException("External storage is not mounted READ/WRITE");
-        }
+        isExternalStorageAvailable();
         File storageDir = albumStorageFactory.getAlbumStorageDir(albumName);
 
         if (storageDir.exists()) {
@@ -46,10 +42,18 @@ public class AlbumRepository {
     }
 
     public Album getAlbumStorageDirParent() {
+        isExternalStorageAvailable();
+
         File storageDir = albumStorageFactory.getAlbumStorageDirParent();
         if (!storageDir.exists() || !storageDir.isDirectory()) {
             storageDir.mkdirs();
         }
         return new Album(storageDir);
+    }
+
+    private static void isExternalStorageAvailable() {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            throw new MemmoException("External storage is not mounted READ/WRITE");
+        }
     }
 }

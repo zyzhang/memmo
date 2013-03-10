@@ -1,15 +1,13 @@
 package zhang.abel.memmo.android;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.ListView;
 import zhang.abel.memmo.android.adapters.AlbumListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
@@ -60,6 +58,7 @@ public class NewMainActivity extends ListActivity {
                 startActivity(intent);
                 return true;
             case 2:
+                //The Edit logic.
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -78,8 +77,8 @@ public class NewMainActivity extends ListActivity {
         }
     }
 
-    private List<Map<String, Object>> getAlbumListItems(Album dirPath) {
-        File[] files = dirPath.getDirectory().listFiles();
+    private List<Map<String, Object>> getAlbumListItems(Album albumParent) {
+        File[] files = albumParent.getDirectory().listFiles();
         List<Map<String, Object>> albumList = new ArrayList<Map<String, Object>>();
         for (File aFile : files)
             if (aFile.isDirectory()) {
@@ -87,29 +86,17 @@ public class NewMainActivity extends ListActivity {
                 map.put("title", aFile.getName());
                 map.put("info", aFile.getName());
                 map.put("img", R.drawable.ic_launcher);
+                map.put("path", albumParent.getDirectory().getPath() + File.separator + aFile.getName());
                 albumList.add(map);
             }
         return albumList;
     }
 
-    private void CreateAlbum() {
-        final EditText albumName = new EditText(this);
-        new AlertDialog.Builder(this)
-                .setTitle("新建记忆相册")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setView(albumName)
-                .setPositiveButton("好了", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String folderName = albumName.getText().toString();
-                        if (!folderName.isEmpty()) {
-                            albumRepository.create(folderName);
-                            albumList = getAlbumListItems(albumParent);
-                            initAdapter(albumList, true);
-                        }
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        String selectedAlbumPath = (String)albumList.get(position).get("path");
+        Intent intent = new Intent(this, NewAlbumActivity.class);
+        intent.putExtra("path",selectedAlbumPath);
+        startActivity(intent);
     }
 }

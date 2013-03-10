@@ -8,5 +8,5 @@ public final class AlbumListItem {
     public ImageView img;
     public TextView title;
     public TextView info;
-    public Button viewBtn;
+    public TextView path;
 }
