@@ -3,6 +3,7 @@ package zhang.abel.memmo.android;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,15 +23,15 @@ import java.util.Map;
 public class NewMainActivity extends ListActivity {
     AlbumRepository albumRepository = new AlbumRepository();
     private List<Map<String, Object>> albumList;
-    private Album dirPath;
+    private Album albumParent;
     private AlbumListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dirPath = albumRepository.getAlbumStorageDirParent();
-        albumList = getAlbumListItems(dirPath);
+        albumParent = albumRepository.getAlbumStorageDirParent();
+        albumList = getAlbumListItems(albumParent);
         initAdapter(albumList, false);
 
         ActionBar actionBar = getActionBar();
@@ -77,27 +78,6 @@ public class NewMainActivity extends ListActivity {
         }
     }
 
-    private void CreateAlbum() {
-        final EditText albumName = new EditText(this);
-        new AlertDialog.Builder(this)
-                .setTitle("新建记忆相册")
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .setView(albumName)
-                .setPositiveButton("好了", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String folderName = albumName.getText().toString();
-                        if (!folderName.isEmpty()) {
-                            albumRepository.create(folderName);
-                            albumList = getAlbumListItems(dirPath);
-                            initAdapter(albumList, true);
-                        }
-                    }
-                })
-                .setNegativeButton("取消", null)
-                .show();
-    }
-
     private List<Map<String, Object>> getAlbumListItems(Album dirPath) {
         File[] files = dirPath.getDirectory().listFiles();
         List<Map<String, Object>> albumList = new ArrayList<Map<String, Object>>();
@@ -110,5 +90,26 @@ public class NewMainActivity extends ListActivity {
                 albumList.add(map);
             }
         return albumList;
+    }
+
+    private void CreateAlbum() {
+        final EditText albumName = new EditText(this);
+        new AlertDialog.Builder(this)
+                .setTitle("新建记忆相册")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setView(albumName)
+                .setPositiveButton("好了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String folderName = albumName.getText().toString();
+                        if (!folderName.isEmpty()) {
+                            albumRepository.create(folderName);
+                            albumList = getAlbumListItems(albumParent);
+                            initAdapter(albumList, true);
+                        }
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 }

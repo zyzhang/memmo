@@ -2,26 +2,16 @@ package zhang.abel.memmo.android;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import zhang.abel.memmo.android.adapters.AlbumListAdapter;
-import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
-
-import java.util.List;
-import java.util.Map;
 
 public class NewCreateAlbumActivity extends Activity {
     AlbumRepository albumRepository = new AlbumRepository();
-    private List<Map<String, Object>> albumList;
-    private Album dirPath;
-    private AlbumListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
