@@ -1,6 +1,7 @@
 package zhang.abel.memmo.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,8 +37,8 @@ public class NewAlbumActivity extends Activity {
                 //TODO Take photo logic should be wrote here
                 return true;
             case 2:
-                //TODO Set notification logic should be wrote here
-                return true;
+                Intent intent = new Intent(this, NotificationSettingActivity.class);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }

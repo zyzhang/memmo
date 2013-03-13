@@ -26,14 +26,6 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/set_notification_button"
-            android:id="@+id/set_reminder"
-            android:layout_gravity="center"
-            android:onClick="setReminder"/>
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/album_list_button"
             android:id="@+id/albumlist"
             android:layout_gravity="center"

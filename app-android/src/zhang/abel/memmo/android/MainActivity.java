@@ -47,11 +47,6 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    public void setReminder(View view) {
-        Intent intent = new Intent(this, ReminderActivity.class);
-        startActivity(intent);
-    }
-
     public void listAlbums(View view) {
         Intent intent = new Intent(MainActivity.this, AlbumListView.class);
         startActivity(intent);
