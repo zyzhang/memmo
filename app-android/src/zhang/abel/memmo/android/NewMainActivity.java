@@ -28,13 +28,13 @@ public class NewMainActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        renderAlbumListPage();
+    }
 
-        albumParent = albumRepository.getAlbumStorageDirParent();
-        albumList = getAlbumListItems(albumParent);
-        initAdapter(albumList, false);
-
-        ActionBar actionBar = getActionBar();
-        actionBar.show();
+    @Override
+    public void onResume(){
+        super.onResume();
+        renderAlbumListPage();
     }
 
     @Override
@@ -63,7 +63,26 @@ public class NewMainActivity extends ListActivity {
         }
     }
 
-    private void initAdapter(List<Map<String, Object>> albumList, boolean isRefresh) {
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        File path = new File((String) albumList.get(position).get("path"));
+        Album album = new Album(path);
+
+        Intent mIntent = new Intent(this, NewAlbumActivity.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putSerializable(SER_KEY, album);
+        mIntent.putExtras(mBundle);
+        startActivity(mIntent);
+    }
+
+    private void renderAlbumListPage() {
+        albumParent = albumRepository.getAlbumStorageDirParent();
+        albumList = getAlbumListItems(albumParent);
+        initAlbumList(albumList, false);
+        showActionBar();
+    }
+
+    private void initAlbumList(List<Map<String, Object>> albumList, boolean isRefresh) {
         if (albumList.size() == 0) {
             return;
         }
@@ -73,6 +92,11 @@ public class NewMainActivity extends ListActivity {
         } else {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void showActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.show();
     }
 
     private List<Map<String, Object>> getAlbumListItems(Album albumParent) {
@@ -88,17 +112,5 @@ public class NewMainActivity extends ListActivity {
                 albumList.add(map);
             }
         return albumList;
-    }
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        File path = new File((String) albumList.get(position).get("path"));
-        Album album = new Album(path);
-
-        Intent mIntent = new Intent(this, NewAlbumActivity.class);
-        Bundle mBundle = new Bundle();
-        mBundle.putSerializable(SER_KEY, album);
-        mIntent.putExtras(mBundle);
-        startActivity(mIntent);
     }
 }

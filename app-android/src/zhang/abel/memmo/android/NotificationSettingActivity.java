@@ -35,6 +35,7 @@ public class NotificationSettingActivity extends Activity {
                                 NOTIFICATION_INTERVAL,
                                 getPendingIntent()
                         );
+                        startActivity(new Intent(NotificationSettingActivity.this, NewMainActivity.class));
                     }
                 }, hourOfDay, minute, true).show();
     }
