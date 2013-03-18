@@ -11,5 +11,6 @@
     <string name="album_name">名称</string>
     <string name="reminder">提醒</string>
     <string name="album_create_button">确定</string>
+    <string name="no_notification">还没有任何拍照提醒哦</string>
 
 </resources>

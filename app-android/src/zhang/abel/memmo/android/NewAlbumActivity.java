@@ -3,6 +3,7 @@ package zhang.abel.memmo.android;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -15,6 +16,8 @@ import zhang.abel.memmo.android.repositories.PictureRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class NewAlbumActivity extends Activity {
 
@@ -38,6 +41,18 @@ public class NewAlbumActivity extends Activity {
         currentAlbum = (Album) getIntent().getSerializableExtra(NewMainActivity.SER_KEY);
         TextView albumName = (TextView) findViewById(R.id.newalbumname);
         albumName.setText(currentAlbum.getDirectory().getPath());
+
+        TextView notificationInfo = (TextView) findViewById(R.id.notificationinfo);
+        String prefName = "notification";
+        SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
+        String currentAlbumName = currentAlbum.getDirectory().getPath().toString();
+        if(pref.contains(currentAlbumName)) {
+            Long time = pref.getLong(currentAlbumName, 0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(time);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            notificationInfo.setText("拍照提醒已设定于每天的" + simpleDateFormat.format(calendar.getTimeInMillis()));
+        }
     }
 
     @Override

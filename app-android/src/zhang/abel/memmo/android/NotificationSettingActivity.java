@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TimePicker;
 import zhang.abel.memmo.android.entities.Album;
@@ -39,6 +40,7 @@ public class NotificationSettingActivity extends Activity {
                                 NOTIFICATION_INTERVAL,
                                 getPendingIntent()
                         );
+                        SaveNotificationInfo(calendar);
                         Intent intent = new Intent(NotificationSettingActivity.this, NewAlbumActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
@@ -46,6 +48,14 @@ public class NotificationSettingActivity extends Activity {
                         startActivity(intent);
                     }
                 }, hourOfDay, minute, true).show();
+    }
+
+    private void SaveNotificationInfo(Calendar calendar) {
+        String prefName = "notification";
+        SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putLong(currentAlbum.getDirectory().getPath().toString(), calendar.getTimeInMillis());
+        editor.commit();
     }
 
     private PendingIntent getPendingIntent() {
