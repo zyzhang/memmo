@@ -63,6 +63,9 @@ public class NewAlbumActivity extends Activity {
                 return true;
             case REMINDER_MENU_ITEM_ID:
                 Intent intent = new Intent(this, NotificationSettingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
+                intent.putExtras(bundle);
                 startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);

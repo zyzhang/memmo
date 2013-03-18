@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TimePicker;
+import zhang.abel.memmo.android.entities.Album;
 
 import java.util.Calendar;
 
@@ -16,10 +17,13 @@ public class NotificationSettingActivity extends Activity {
     private static final int NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000;
     private AlarmManager alarmManager;
     private Calendar calendar;
+    private Album currentAlbum;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newmain);
+
+        currentAlbum = (Album) getIntent().getSerializableExtra(NewMainActivity.SER_KEY);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         calendar = Calendar.getInstance();
@@ -35,7 +39,11 @@ public class NotificationSettingActivity extends Activity {
                                 NOTIFICATION_INTERVAL,
                                 getPendingIntent()
                         );
-                        startActivity(new Intent(NotificationSettingActivity.this, NewMainActivity.class));
+                        Intent intent = new Intent(NotificationSettingActivity.this, NewAlbumActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }
                 }, hourOfDay, minute, true).show();
     }
@@ -43,7 +51,7 @@ public class NotificationSettingActivity extends Activity {
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.putExtras(setNotificationBundle());
-        return PendingIntent.getBroadcast(NotificationSettingActivity.this, 0,intent, 0);
+        return PendingIntent.getBroadcast(NotificationSettingActivity.this, 0,intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void setCalendar(int hourOfDay, int minute) {
@@ -58,6 +66,7 @@ public class NotificationSettingActivity extends Activity {
         Bundle bundle = new Bundle();
         bundle.putString("info", NOTIFICATION_CONTENT);
         bundle.putInt("id", NOTIFICATION_ID);
+        bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
         return bundle;
     }
 }
