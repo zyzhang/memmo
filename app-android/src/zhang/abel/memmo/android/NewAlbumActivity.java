@@ -96,11 +96,11 @@ public class NewAlbumActivity extends Activity {
     private void dispatchTakePictureIntent() {
         try {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Album album = currentAlbum;
-            if (album == null) {
+            if (currentAlbum == null) {
                 showMessageBox("No Album.........");
+                return;
             }
-            currentPicture = album.addNewPicture();
+            currentPicture = currentAlbum.addNewPicture();
             pictureRepository.save(currentPicture);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPicture.getUri());
 
