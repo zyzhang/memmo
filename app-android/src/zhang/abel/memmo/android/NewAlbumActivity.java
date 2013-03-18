@@ -23,8 +23,6 @@ public class NewAlbumActivity extends Activity {
 
     private static final int ACTION_TAKE_PIC = 11;
 
-    private final String albumName = "memmo";
-
     private AlbumRepository albumRepository;
     private PictureRepository pictureRepository;
     private Picture currentPicture;
@@ -34,7 +32,8 @@ public class NewAlbumActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newalbum);
 
-        //TODO Should load pictures under this album.
+        pictureRepository = new PictureRepository();
+        albumRepository = new AlbumRepository();
 
         currentAlbum = (Album) getIntent().getSerializableExtra(NewMainActivity.SER_KEY);
         TextView albumName = (TextView) findViewById(R.id.newalbumname);
@@ -97,7 +96,7 @@ public class NewAlbumActivity extends Activity {
     private void dispatchTakePictureIntent() {
         try {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            Album album = getAlbum();
+            Album album = currentAlbum;
             if (album == null) {
                 showMessageBox("No Album.........");
             }
@@ -111,7 +110,4 @@ public class NewAlbumActivity extends Activity {
         }
     }
 
-    private Album getAlbum() {
-        return currentAlbum;
-    }
 }
