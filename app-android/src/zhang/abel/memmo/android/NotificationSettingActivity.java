@@ -11,11 +11,12 @@ import android.widget.TimePicker;
 import zhang.abel.memmo.android.entities.Album;
 
 import java.util.Calendar;
+import java.util.Random;
 
 public class NotificationSettingActivity extends Activity {
-    private static final int NOTIFICATION_ID = 1;
     private static final String NOTIFICATION_CONTENT = "该拍照啦！";
     private static final int NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000;
+    private int NOTIFICATION_ID = GenerateNotificationId();
     private AlarmManager alarmManager;
     private Calendar calendar;
     private Album currentAlbum;
@@ -61,7 +62,7 @@ public class NotificationSettingActivity extends Activity {
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.putExtras(setNotificationBundle());
-        return PendingIntent.getBroadcast(NotificationSettingActivity.this, 0,intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(NotificationSettingActivity.this, NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void setCalendar(int hourOfDay, int minute) {
@@ -78,5 +79,11 @@ public class NotificationSettingActivity extends Activity {
         bundle.putInt("id", NOTIFICATION_ID);
         bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
         return bundle;
+    }
+
+    private int GenerateNotificationId(){
+        Random random = new Random();
+        int randomInt = random.nextInt(100);
+        return randomInt + 1;
     }
 }

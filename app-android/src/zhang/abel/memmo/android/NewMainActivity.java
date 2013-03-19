@@ -32,12 +32,6 @@ public class NewMainActivity extends ListActivity {
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        renderAlbumListPage();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem create = menu.add(0, 1, 0, R.string.create_button_text);
