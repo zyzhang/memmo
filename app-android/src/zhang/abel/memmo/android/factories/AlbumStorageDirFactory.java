@@ -1,4 +1,4 @@
-package zhang.abel.memmo.android;
+package zhang.abel.memmo.android.factories;
 
 import java.io.File;
 

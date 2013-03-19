@@ -40,8 +40,8 @@ public class NewMainActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuItem create = menu.add(0, 1, 0, "创建");
-        MenuItem edit = menu.add(0, 2, 1, "编辑");
+        MenuItem create = menu.add(0, 1, 0, R.string.create_button_text);
+        MenuItem edit = menu.add(0, 2, 1, R.string.edit_button_text);
         create.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         edit.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;

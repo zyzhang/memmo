@@ -2,9 +2,9 @@ package zhang.abel.memmo.android.repositories;
 
 import android.os.Build;
 import android.os.Environment;
-import zhang.abel.memmo.android.AlbumStorageDirFactory;
-import zhang.abel.memmo.android.BaseAlbumDirFactory;
-import zhang.abel.memmo.android.FroyoAlbumDirFactory;
+import zhang.abel.memmo.android.factories.AlbumStorageDirFactory;
+import zhang.abel.memmo.android.factories.BaseAlbumDirFactory;
+import zhang.abel.memmo.android.factories.FroyoAlbumDirFactory;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.exceptions.MemmoException;
 
