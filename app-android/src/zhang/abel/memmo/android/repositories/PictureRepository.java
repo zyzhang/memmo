@@ -2,7 +2,6 @@ package zhang.abel.memmo.android.repositories;
 
 import zhang.abel.memmo.android.entities.Picture;
 
-import java.io.File;
 import java.io.IOException;
 
 public class PictureRepository {

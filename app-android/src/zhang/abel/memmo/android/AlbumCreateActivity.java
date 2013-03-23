@@ -11,12 +11,13 @@ import android.widget.EditText;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
 public class AlbumCreateActivity extends Activity {
-    AlbumRepository albumRepository = new AlbumRepository();
 
+    private AlbumRepository albumRepository;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.createalbum);
+        albumRepository = new AlbumRepository();
 
         ActionBar actionBar = getActionBar();
         actionBar.show();

@@ -45,7 +45,6 @@ public class AlbumListActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                //CreateAlbum();TODO : need replace it with createablum page.
                 Intent intent = new Intent(this, AlbumCreateActivity.class);
                 startActivity(intent);
                 return true;

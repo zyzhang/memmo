@@ -26,7 +26,6 @@ public class AlbumActivity extends Activity {
 
     private static final int ACTION_TAKE_PIC = 11;
 
-    private AlbumRepository albumRepository;
     private PictureRepository pictureRepository;
     private Picture currentPicture;
     private Album currentAlbum;
@@ -36,7 +35,6 @@ public class AlbumActivity extends Activity {
         setContentView(R.layout.album);
 
         pictureRepository = new PictureRepository();
-        albumRepository = new AlbumRepository();
 
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
         TextView albumName = (TextView) findViewById(R.id.newalbumname);

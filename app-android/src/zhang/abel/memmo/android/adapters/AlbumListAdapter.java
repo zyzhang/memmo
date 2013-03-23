@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import zhang.abel.memmo.android.R;
@@ -53,7 +52,7 @@ public class AlbumListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             item = new AlbumListItem();
-            convertView = mInflater.inflate(R.layout.newmain, null);
+            convertView = mInflater.inflate(R.layout.albumlist, null);
             item.img = (ImageView)convertView.findViewById(R.id.img);
             item.title = (TextView)convertView.findViewById(R.id.title);
             item.info = (TextView)convertView.findViewById(R.id.info);
