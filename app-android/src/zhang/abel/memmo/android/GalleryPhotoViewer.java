@@ -46,5 +46,4 @@ public class GalleryPhotoViewer extends Activity implements ViewSwitcher.ViewFac
     public View makeView() {
         return null;
     }
-
 }

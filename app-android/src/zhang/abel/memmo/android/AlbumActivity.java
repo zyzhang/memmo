@@ -8,7 +8,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
+import zhang.abel.memmo.android.adapters.ImageListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
@@ -51,6 +56,16 @@ public class AlbumActivity extends Activity {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             notificationInfo.setText(R.string.take_photo_reminder_text + simpleDateFormat.format(calendar.getTimeInMillis()));
         }
+
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageListAdapter(this));
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                //TODO view the image
+                showMessageBox("position:"+position);
+            }
+        });
     }
 
     @Override
