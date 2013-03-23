@@ -75,6 +75,7 @@ public class AlbumActivity extends Activity {
                 String intentName = MediaStore.ACTION_IMAGE_CAPTURE;
                 if (IntentUtils.isIntentAvailable(this, intentName)) {
                     dispatchTakePictureIntent();
+                    initializeImageList();
                 } else {
                     showMessageBox("Can not call the Camera...");
                 }
@@ -133,7 +134,10 @@ public class AlbumActivity extends Activity {
 
     private void initializeImageList() {
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageListAdapter(this,currentAlbum.getDirectory().getPath()));
+        ImageListAdapter adapter = new ImageListAdapter(this, currentAlbum.getDirectory().getPath());
+        adapter.notifyDataSetChanged();
+        gridview.invalidateViews();
+        gridview.setAdapter(adapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
