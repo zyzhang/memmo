@@ -18,7 +18,7 @@ public class ImageListAdapter extends BaseAdapter {
 
     private Context context;
     private String albumPath;
-    private List<Bitmap> fileList;
+    private List<Bitmap> imageBitmapList;
 
     public ImageListAdapter(Context context, String albumPath) {
         this.context = context;
@@ -27,7 +27,7 @@ public class ImageListAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return fileList.size();
+        return imageBitmapList.size();
     }
 
     public Object getItem(int position) {
@@ -49,12 +49,12 @@ public class ImageListAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageBitmap(fileList.get(position));
+        imageView.setImageBitmap(imageBitmapList.get(position));
         return imageView;
     }
 
     private List<Bitmap> initialImageBitmapList() {
-        fileList = new ArrayList<Bitmap>();
+        imageBitmapList = new ArrayList<Bitmap>();
 
         File fileDir = new File(albumPath);
         File[] files = fileDir.listFiles();
@@ -64,10 +64,10 @@ public class ImageListAdapter extends BaseAdapter {
                 String fileName = file.getName();
                 if(fileName.lastIndexOf(".") > 0
                         && fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).equals("jpg")){
-                    fileList.add(BitmapFactory.decodeFile(albumPath + File.separator + file.getName()));
+                    imageBitmapList.add(BitmapFactory.decodeFile(albumPath + File.separator + file.getName()));
                 }
             }
         }
-        return fileList;
+        return imageBitmapList;
     }
 }

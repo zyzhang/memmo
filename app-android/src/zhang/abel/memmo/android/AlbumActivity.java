@@ -42,8 +42,6 @@ public class AlbumActivity extends Activity {
         pictureRepository = new PictureRepository();
 
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
-        TextView albumName = (TextView) findViewById(R.id.newalbumname);
-        albumName.setText(currentAlbum.getDirectory().getPath());
 
         TextView notificationInfo = (TextView) findViewById(R.id.notificationinfo);
         String prefName = "notification";
@@ -57,15 +55,7 @@ public class AlbumActivity extends Activity {
             notificationInfo.setText(R.string.take_photo_reminder_text + simpleDateFormat.format(calendar.getTimeInMillis()));
         }
 
-        GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageListAdapter(this,currentAlbum.getDirectory().getPath()));
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                //TODO view the image
-                showMessageBox("position:"+position);
-            }
-        });
+        initializeImageList();
     }
 
     @Override
@@ -141,4 +131,15 @@ public class AlbumActivity extends Activity {
         }
     }
 
+    private void initializeImageList() {
+        GridView gridview = (GridView) findViewById(R.id.gridview);
+        gridview.setAdapter(new ImageListAdapter(this,currentAlbum.getDirectory().getPath()));
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                //TODO view the image
+                showMessageBox("position:" + position);
+            }
+        });
+    }
 }

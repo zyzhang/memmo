@@ -19,10 +19,6 @@ public class AlbumListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<Map<String, Object>> albumList;
 
-    public AlbumListAdapter(Context context){
-        this.mInflater = LayoutInflater.from(context);
-    }
-
     public AlbumListAdapter(Context context,List<Map<String, Object>> albumList){
         this.mInflater = LayoutInflater.from(context);
         this.albumList = albumList;
