@@ -58,7 +58,7 @@ public class AlbumActivity extends Activity {
         }
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        gridview.setAdapter(new ImageListAdapter(this));
+        gridview.setAdapter(new ImageListAdapter(this,currentAlbum.getDirectory().getPath()));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
