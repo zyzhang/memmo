@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class NewAlbumActivity extends Activity {
+public class AlbumActivity extends Activity {
 
     public static final int TAKE_PIC_MENU_ITEM_ID = 1;
     public static final int REMINDER_MENU_ITEM_ID = 2;
@@ -33,12 +33,12 @@ public class NewAlbumActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.newalbum);
+        setContentView(R.layout.album);
 
         pictureRepository = new PictureRepository();
         albumRepository = new AlbumRepository();
 
-        currentAlbum = (Album) getIntent().getSerializableExtra(NewMainActivity.SER_KEY);
+        currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
         TextView albumName = (TextView) findViewById(R.id.newalbumname);
         albumName.setText(currentAlbum.getDirectory().getPath());
 
@@ -51,7 +51,7 @@ public class NewAlbumActivity extends Activity {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            notificationInfo.setText("拍照提醒已设定于每天的" + simpleDateFormat.format(calendar.getTimeInMillis()));
+            notificationInfo.setText(R.string.take_photo_reminder_text + simpleDateFormat.format(calendar.getTimeInMillis()));
         }
     }
 
@@ -79,7 +79,7 @@ public class NewAlbumActivity extends Activity {
             case REMINDER_MENU_ITEM_ID:
                 Intent intent = new Intent(this, NotificationSettingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
+                bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
                 intent.putExtras(bundle);
                 startActivity(intent);
             default:

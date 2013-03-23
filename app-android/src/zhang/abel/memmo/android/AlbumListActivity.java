@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewMainActivity extends ListActivity {
+public class AlbumListActivity extends ListActivity {
     public final static String SER_KEY = "";
     AlbumRepository albumRepository = new AlbumRepository();
     private List<Map<String, Object>> albumList;
@@ -46,7 +46,7 @@ public class NewMainActivity extends ListActivity {
         switch (item.getItemId()) {
             case 1:
                 //CreateAlbum();TODO : need replace it with createablum page.
-                Intent intent = new Intent(this, NewCreateAlbumActivity.class);
+                Intent intent = new Intent(this, AlbumCreateActivity.class);
                 startActivity(intent);
                 return true;
             case 2:
@@ -62,7 +62,7 @@ public class NewMainActivity extends ListActivity {
         File path = new File((String) albumList.get(position).get("path"));
         Album album = new Album(path);
 
-        Intent mIntent = new Intent(this, NewAlbumActivity.class);
+        Intent mIntent = new Intent(this, AlbumActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable(SER_KEY, album);
         mIntent.putExtras(mBundle);

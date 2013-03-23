@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Random;
 
 public class NotificationSettingActivity extends Activity {
+
     private static final String NOTIFICATION_CONTENT = "该拍照啦！";
     private static final int NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000;
     private int NOTIFICATION_ID = GenerateNotificationId();
@@ -25,7 +26,7 @@ public class NotificationSettingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newmain);
 
-        currentAlbum = (Album) getIntent().getSerializableExtra(NewMainActivity.SER_KEY);
+        currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         calendar = Calendar.getInstance();
@@ -42,9 +43,9 @@ public class NotificationSettingActivity extends Activity {
                                 getPendingIntent()
                         );
                         SaveNotificationInfo(calendar);
-                        Intent intent = new Intent(NotificationSettingActivity.this, NewAlbumActivity.class);
+                        Intent intent = new Intent(NotificationSettingActivity.this, AlbumActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
+                        bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }
@@ -77,7 +78,7 @@ public class NotificationSettingActivity extends Activity {
         Bundle bundle = new Bundle();
         bundle.putString("info", NOTIFICATION_CONTENT);
         bundle.putInt("id", NOTIFICATION_ID);
-        bundle.putSerializable(NewMainActivity.SER_KEY, currentAlbum);
+        bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
         return bundle;
     }
 

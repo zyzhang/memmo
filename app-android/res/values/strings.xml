@@ -16,5 +16,6 @@
     <string name="edit_button_text">编辑</string>
     <string name="return_back_text">返回</string>
     <string name="take_photo_text">拍照</string>
+    <string name="take_photo_reminder_text">拍照提醒已设定于每天的</string>
 
 </resources>

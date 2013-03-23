@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
-public class NewCreateAlbumActivity extends Activity {
+public class AlbumCreateActivity extends Activity {
     AlbumRepository albumRepository = new AlbumRepository();
 
     @Override
@@ -31,7 +31,7 @@ public class NewCreateAlbumActivity extends Activity {
         cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(NewCreateAlbumActivity.this, NewMainActivity.class);
+                Intent intent = new Intent(AlbumCreateActivity.this, AlbumListActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -48,7 +48,7 @@ public class NewCreateAlbumActivity extends Activity {
             albumRepository.create(albumName);
         }
 
-        Intent intent = new Intent(NewCreateAlbumActivity.this, NewMainActivity.class);
+        Intent intent = new Intent(AlbumCreateActivity.this, AlbumListActivity.class);
         startActivity(intent);
     }
 }
