@@ -2,13 +2,16 @@ package zhang.abel.memmo.android.repositories;
 
 import android.os.Build;
 import android.os.Environment;
+import zhang.abel.memmo.android.entities.Album;
+import zhang.abel.memmo.android.exceptions.MemmoException;
 import zhang.abel.memmo.android.factories.AlbumStorageDirFactory;
 import zhang.abel.memmo.android.factories.BaseAlbumDirFactory;
 import zhang.abel.memmo.android.factories.FroyoAlbumDirFactory;
-import zhang.abel.memmo.android.entities.Album;
-import zhang.abel.memmo.android.exceptions.MemmoException;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlbumRepository {
 
@@ -36,9 +39,30 @@ public class AlbumRepository {
     public Album get(String albumName) {
         File storageDir = albumStorageFactory.getAlbumStorageDir(albumName);
         if (storageDir.exists() && storageDir.isDirectory()) {
-            return new Album(storageDir);
+            return new Album(albumName);
         }
         return null;
+    }
+
+    public List<Album> list() {
+        verifyExternalStorageAvailable();
+
+        File baseDir = albumStorageFactory.getAppPhotoBaseDir();
+        if (!baseDir.exists() || !baseDir.isDirectory()) {
+            return new ArrayList<Album>();
+        }
+
+        File[] dirs = baseDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory();
+            }
+        });
+        ArrayList<Album> results = new ArrayList<Album>();
+        for(File dir : dirs) {
+            results.add(new Album(dir.getName()));
+        }
+        return results;
     }
 
     public Album getAlbumStorageDirParent() {

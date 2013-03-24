@@ -69,8 +69,12 @@ public class AlbumListActivity extends ListActivity {
     }
 
     private void renderAlbumListPage() {
+
         albumParent = albumRepository.getAlbumStorageDirParent();
         albumList = getAlbumListItems(albumParent);
+
+        List<Album> albums = albumRepository.list();
+
         initAlbumList(albumList, false);
         showActionBar();
     }
