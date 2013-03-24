@@ -5,6 +5,11 @@ import java.io.Serializable;
 
 public class Album implements Serializable {
     File directory;
+    private String name;
+
+    public Album(String name) {
+        this.name = name;
+    }
 
     public Album(File directory) {
         this.directory = directory;
@@ -16,5 +21,9 @@ public class Album implements Serializable {
 
     public File getDirectory() {
         return directory;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
 public class AlbumCreateActivity extends Activity {
@@ -46,7 +47,7 @@ public class AlbumCreateActivity extends Activity {
 
         String albumName = txtName.getText().toString();
         if (!albumName.isEmpty()) {
-            albumRepository.create(albumName);
+            albumRepository.create(new Album(albumName));
         }
 
         Intent intent = new Intent(AlbumCreateActivity.this, AlbumListActivity.class);

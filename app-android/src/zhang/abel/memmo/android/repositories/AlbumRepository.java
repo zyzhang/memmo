@@ -22,15 +22,15 @@ public class AlbumRepository {
         }
     }
 
-    public Album create(String albumName) {
+    public void create(Album album) {
         verifyExternalStorageAvailable();
-        File storageDir = albumStorageFactory.getAlbumStorageDir(albumName);
+
+        File storageDir = albumStorageFactory.getAlbumStorageDir(album.getName());
 
         if (storageDir.exists()) {
             throw new MemmoException(String.format("%s already exists", storageDir.getAbsolutePath()));
         }
         storageDir.mkdirs();
-        return new Album(storageDir);
     }
 
     public Album get(String albumName) {
