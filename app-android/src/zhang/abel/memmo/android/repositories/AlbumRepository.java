@@ -23,7 +23,7 @@ public class AlbumRepository {
     }
 
     public Album create(String albumName) {
-        isExternalStorageAvailable();
+        verifyExternalStorageAvailable();
         File storageDir = albumStorageFactory.getAlbumStorageDir(albumName);
 
         if (storageDir.exists()) {
@@ -42,16 +42,16 @@ public class AlbumRepository {
     }
 
     public Album getAlbumStorageDirParent() {
-        isExternalStorageAvailable();
+        verifyExternalStorageAvailable();
 
-        File storageDir = albumStorageFactory.getAlbumStorageDirParent();
+        File storageDir = albumStorageFactory.getAppPhotoBaseDir();
         if (!storageDir.exists() || !storageDir.isDirectory()) {
             storageDir.mkdirs();
         }
         return new Album(storageDir);
     }
 
-    private static void isExternalStorageAvailable() {
+    private static void verifyExternalStorageAvailable() {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             throw new MemmoException("External storage is not mounted READ/WRITE");
         }
