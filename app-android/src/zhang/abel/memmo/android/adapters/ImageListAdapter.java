@@ -42,7 +42,7 @@ public class ImageListAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            imageView.setLayoutParams(new GridView.LayoutParams(140, 140));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -64,10 +64,29 @@ public class ImageListAdapter extends BaseAdapter {
                 String fileName = file.getName();
                 if(fileName.lastIndexOf(".") > 0
                         && fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).equals("jpg")){
-                    imageBitmapList.add(BitmapFactory.decodeFile(albumPath + File.separator + file.getName()));
+                    Bitmap image =decodeBitmap(albumPath + File.separator + file.getName());
+                    imageBitmapList.add(image);
                 }
             }
         }
         return imageBitmapList;
+    }
+    public Bitmap decodeBitmap(String path)
+    {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        Bitmap imageBitmap = BitmapFactory.decodeFile(path, options);
+        float realWidth = options.outWidth;
+        float realHeight = options.outHeight;
+        int scale = (int) ((realHeight > realWidth ? realHeight : realWidth) / 100);
+        if (scale <= 0)
+        {
+            scale = 1;
+        }
+        options.inSampleSize = scale;
+        options.inJustDecodeBounds = false;
+        imageBitmap = BitmapFactory.decodeFile(path, options);
+
+        return imageBitmap;
     }
 }
