@@ -26,7 +26,7 @@ public class AlbumCreateActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        MenuItem cancel = menu.add(0, 1, 0, R.string.return_back_text);
+        MenuItem cancel = menu.add(0, 1, 0, R.string.back);
         cancel.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         cancel.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

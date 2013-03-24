@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Common-->
+    <string name="app_name">萌好瞬间</string>
+
+    <string name="ok">确定</string>
+    <string name="edit">编辑</string>
+    <string name="back">返回</string>
+
+    <!--Messages-->
+    <string name="msg_no_alarm">还没有任何拍照提醒哦</string>
+    <string name="msg_reminder_notification">拍照提醒已设定于每天的</string>
+
+    <!--Buttons-->
+    <string name="btn_create">创建</string>
+
+    <!--Labels-->
+    <string name="lbl_remark">备注</string>
+    <string name="lbl_album_name">名称</string>
+
+    <!--Menu-->
+    <string name="menu_take_photo">拍照</string>
+    <string name="menu_reminder">提醒</string>
+
+</resources>

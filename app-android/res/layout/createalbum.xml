@@ -14,7 +14,7 @@
                 android:layout_marginLeft="20dip"
                 android:layout_marginRight="20dip"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/album_name"
+                android:text="@string/lbl_album_name"
                 android:gravity="left"/>
 
         <EditText
@@ -33,7 +33,7 @@
                 android:layout_marginLeft="20dip"
                 android:layout_marginRight="20dip"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/remark"
+                android:text="@string/lbl_remark"
                 android:gravity="left"/>
         <EditText
                 android:id="@+id/txt_remarks"
@@ -51,7 +51,7 @@
             android:layout_marginLeft="20dip"
             android:layout_marginRight="20dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/reminder_text"
+            android:text="@string/menu_reminder"
             android:gravity="left"/>
     <EditText
             android:id="@+id/txt_reminder"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dip"
             android:layout_marginRight="50dip"
-            android:text="@string/album_create_button"
+            android:text="@string/ok"
             android:id="@+id/albumcreate"
             android:layout_gravity="center"
             android:onClick="createAlbum"/>
