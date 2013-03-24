@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TimePicker;
 import zhang.abel.memmo.android.entities.Album;
+import zhang.abel.memmo.android.repositories.AlbumRepository;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -21,11 +22,13 @@ public class NotificationSettingActivity extends Activity {
     private AlarmManager alarmManager;
     private Calendar calendar;
     private Album currentAlbum;
+    private AlbumRepository albumRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albumlist);
 
+        albumRepository = new AlbumRepository();
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -56,7 +59,9 @@ public class NotificationSettingActivity extends Activity {
         String prefName = "notification";
         SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putLong(currentAlbum.getDirectory().getPath().toString(), calendar.getTimeInMillis());
+
+        String key = albumRepository.getAlbumDirectory(currentAlbum).getPath();
+        editor.putLong(key, calendar.getTimeInMillis());
         editor.commit();
     }
 

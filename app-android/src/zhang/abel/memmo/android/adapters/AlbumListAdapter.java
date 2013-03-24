@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import zhang.abel.memmo.android.R;
+import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.AlbumListItem;
 
 import java.util.List;
@@ -18,15 +19,21 @@ public class AlbumListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<Map<String, Object>> albumList;
+    private List<Album> albums;
 
-    public AlbumListAdapter(Context context,List<Map<String, Object>> albumList){
+    public AlbumListAdapter(Context context,List<Album> albums) {
         this.mInflater = LayoutInflater.from(context);
-        this.albumList = albumList;
+        this.albums = albums;
     }
+
+//    public AlbumListAdapter(Context context,List<Map<String, Object>> albumList){
+//        this.mInflater = LayoutInflater.from(context);
+//        this.albumList = albumList;
+//    }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        return albumList.size();
+        return albums.size();
     }
 
     @Override
@@ -58,9 +65,9 @@ public class AlbumListAdapter extends BaseAdapter {
             item = (AlbumListItem)convertView.getTag();
         }
 
-        item.img.setBackgroundResource((Integer) albumList.get(position).get("img"));
-        item.title.setText((String) albumList.get(position).get("title"));
-        item.info.setText((String) albumList.get(position).get("info"));
+        item.img.setBackgroundResource(R.drawable.ic_launcher);
+        item.title.setText(albums.get(position).getName());
+        item.info.setText(albums.get(position).getRemark());
 
         return convertView;
     }

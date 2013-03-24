@@ -15,9 +15,11 @@ import android.widget.TextView;
 import zhang.abel.memmo.android.adapters.ImageListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
+import zhang.abel.memmo.android.repositories.AlbumRepository;
 import zhang.abel.memmo.android.repositories.PictureRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,11 +34,13 @@ public class AlbumActivity extends Activity {
     private PictureRepository pictureRepository;
     private Picture currentPicture;
     private Album currentAlbum;
+    private AlbumRepository albumRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album);
 
+        albumRepository = new AlbumRepository();
         pictureRepository = new PictureRepository();
 
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
@@ -44,8 +48,9 @@ public class AlbumActivity extends Activity {
         TextView notificationInfo = (TextView) findViewById(R.id.notificationinfo);
         String prefName = "notification";
         SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
-        String currentAlbumName = currentAlbum.getDirectory().getPath().toString();
+        String currentAlbumName = currentAlbum.getName();
         if(pref.contains(currentAlbumName)) {
+
             Long time = pref.getLong(currentAlbumName, 0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
@@ -109,7 +114,7 @@ public class AlbumActivity extends Activity {
 
     private void addPictureToGallery(Picture picture) {
         Intent mediaScanIntent = new Intent("android.intent.action.MEDIA_SCANNER_SCAN_FILE");
-        mediaScanIntent.setData(picture.getUri());
+        mediaScanIntent.setData(pictureRepository.getUri(picture));
         this.sendBroadcast(mediaScanIntent);
     }
 
@@ -120,9 +125,9 @@ public class AlbumActivity extends Activity {
                 showMessageBox("No Album.........");
                 return;
             }
-            currentPicture = currentAlbum.addNewPicture();
+            currentPicture = new Picture(currentAlbum);
             pictureRepository.save(currentPicture);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPicture.getUri());
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureRepository.getUri(currentPicture));
 
             startActivityForResult(takePictureIntent, ACTION_TAKE_PIC);
         } catch (IOException e) {
@@ -132,7 +137,8 @@ public class AlbumActivity extends Activity {
 
     private void initializeImageList() {
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        ImageListAdapter adapter = new ImageListAdapter(this, currentAlbum.getDirectory().getPath());
+        File albumDirectory = albumRepository.getAlbumDirectory(currentAlbum);
+        ImageListAdapter adapter = new ImageListAdapter(this, albumDirectory.getPath());
         adapter.notifyDataSetChanged();
         gridview.invalidateViews();
         gridview.setAdapter(adapter);

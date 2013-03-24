@@ -65,19 +65,13 @@ public class AlbumRepository {
         return results;
     }
 
-    public Album getAlbumStorageDirParent() {
-        verifyExternalStorageAvailable();
-
-        File storageDir = albumStorageFactory.getAppPhotoBaseDir();
-        if (!storageDir.exists() || !storageDir.isDirectory()) {
-            storageDir.mkdirs();
-        }
-        return new Album(storageDir);
-    }
-
     private static void verifyExternalStorageAvailable() {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             throw new MemmoException("External storage is not mounted READ/WRITE");
         }
+    }
+
+    public File getAlbumDirectory(Album album) {
+        return albumStorageFactory.getAlbumStorageDir(album.getName());
     }
 }

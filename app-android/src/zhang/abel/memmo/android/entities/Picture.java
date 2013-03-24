@@ -7,27 +7,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Picture {
-    private static final String PICTURE_FILE_EXT = ".jpg";
 
     private Album album;
-    private File file;
     private String pictureName;
 
-    public Picture(Album album, String pictureName) {
+    private Picture(Album album, String pictureName) {
         this.album = album;
         this.pictureName = pictureName;
-        this.file = new File(album.getDirectory(), this.pictureName + PICTURE_FILE_EXT);
     }
 
     public Picture(Album album) {
         this(album, new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
     }
 
+    @Deprecated
     public File getFile() {
-        return file;
+        return null;
     }
 
-    public Uri getUri() {
-        return Uri.fromFile(file);
+    public String getPictureName() {
+        return pictureName;
+    }
+
+    public Album getAlbum() {
+        return album;
     }
 }

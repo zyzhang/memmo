@@ -21,9 +21,11 @@ import java.util.Map;
 public class AlbumListActivity extends ListActivity {
     public final static String SER_KEY = "";
     AlbumRepository albumRepository = new AlbumRepository();
-    private List<Map<String, Object>> albumList;
-    private Album albumParent;
+    private List<Album> albums;
     private AlbumListAdapter adapter;
+
+    public AlbumListActivity() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,28 +60,20 @@ public class AlbumListActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        File path = new File((String) albumList.get(position).get("path"));
-        Album album = new Album(path);
-
         Intent mIntent = new Intent(this, AlbumActivity.class);
         Bundle mBundle = new Bundle();
-        mBundle.putSerializable(SER_KEY, album);
+        mBundle.putSerializable(SER_KEY, albums.get(position));
         mIntent.putExtras(mBundle);
         startActivity(mIntent);
     }
 
     private void renderAlbumListPage() {
-
-        albumParent = albumRepository.getAlbumStorageDirParent();
-        albumList = getAlbumListItems(albumParent);
-
-        List<Album> albums = albumRepository.list();
-
-        initAlbumList(albumList, false);
+        albums = albumRepository.list();
+        initAlbumList(albums, false);
         showActionBar();
     }
 
-    private void initAlbumList(List<Map<String, Object>> albumList, boolean isRefresh) {
+    private void initAlbumList(List<Album> albumList, boolean isRefresh) {
         if (albumList.size() == 0) {
             return;
         }
@@ -96,18 +90,4 @@ public class AlbumListActivity extends ListActivity {
         actionBar.show();
     }
 
-    private List<Map<String, Object>> getAlbumListItems(Album albumParent) {
-        File[] files = albumParent.getDirectory().listFiles();
-        List<Map<String, Object>> albumList = new ArrayList<Map<String, Object>>();
-        for (File aFile : files)
-            if (aFile.isDirectory()) {
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("title", aFile.getName());
-                map.put("info", aFile.getName());
-                map.put("img", R.drawable.ic_launcher);
-                map.put("path", albumParent.getDirectory().getPath() + File.separator + aFile.getName());
-                albumList.add(map);
-            }
-        return albumList;
-    }
 }
