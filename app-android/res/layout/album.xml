@@ -6,14 +6,10 @@
               android:layout_height="match_parent">
 
     <TextView
-            android:id="@+id/newalbumname"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/lbl_album_name"
-            android:gravity="left"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/currentAlbumName"
+        android:layout_gravity="center"/>
 
     <TextView
             android:id="@+id/notificationinfo"

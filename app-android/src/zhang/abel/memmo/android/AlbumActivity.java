@@ -45,13 +45,14 @@ public class AlbumActivity extends Activity {
 
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
 
+        ((TextView) findViewById(R.id.currentAlbumName)).setText(currentAlbum.getName());
+
         TextView notificationInfo = (TextView) findViewById(R.id.notificationinfo);
         String prefName = "notification";
         SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
-        String currentAlbumName = currentAlbum.getName();
-        if(pref.contains(currentAlbumName)) {
+        if(pref.contains(currentAlbum.getName())) {
 
-            Long time = pref.getLong(currentAlbumName, 0);
+            Long time = pref.getLong(currentAlbum.getName(), 0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
