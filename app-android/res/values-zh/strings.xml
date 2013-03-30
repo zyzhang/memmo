@@ -22,4 +22,9 @@
     <string name="menu_take_photo">拍照</string>
     <string name="menu_reminder">提醒</string>
 
+    <!--Exit-->
+    <string name="exit_title">信息提示</string>
+    <string name="exit_msg">确定要萌好瞬间吗</string>
+    <string name="exit_ok">确定</string>
+    <string name="exit_cancel">取消</string>
 </resources>

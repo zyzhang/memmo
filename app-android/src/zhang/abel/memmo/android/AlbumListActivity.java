@@ -1,9 +1,13 @@
 package zhang.abel.memmo.android;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +69,34 @@ public class AlbumListActivity extends ListActivity {
         mBundle.putSerializable(SER_KEY, albums.get(position));
         mIntent.putExtras(mBundle);
         startActivity(mIntent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            showExitDialog();
+            return true;
+        } else
+            return super.onKeyDown(keyCode, event);
+    }
+
+    private void showExitDialog() {
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_title)
+                .setMessage(R.string.exit_msg)
+                .setPositiveButton(R.string.exit_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNeutralButton(R.string.exit_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
     private void renderAlbumListPage() {

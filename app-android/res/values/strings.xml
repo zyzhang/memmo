@@ -21,4 +21,10 @@
     <!--Menu-->
     <string name="menu_take_photo">Take Photo</string>
     <string name="menu_reminder">Reminder</string>
+
+    <!--Exit-->
+    <string name="exit_title">Notice</string>
+    <string name="exit_msg">Are you sure want to exit Memmo</string>
+    <string name="exit_ok">Ok</string>
+    <string name="exit_cancel">Cancel</string>
 </resources>
