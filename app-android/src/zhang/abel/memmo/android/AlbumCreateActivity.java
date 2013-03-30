@@ -21,6 +21,7 @@ public class AlbumCreateActivity extends Activity {
         albumRepository = new AlbumRepository();
 
         ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.show();
     }
 
@@ -39,6 +40,20 @@ public class AlbumCreateActivity extends Activity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                intent = new Intent(this, AlbumListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void createAlbum(View view) {

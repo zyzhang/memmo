@@ -1,5 +1,6 @@
 package zhang.abel.memmo.android;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -40,6 +41,9 @@ public class AlbumActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album);
 
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         albumRepository = new AlbumRepository();
         pictureRepository = new PictureRepository();
 
@@ -76,6 +80,7 @@ public class AlbumActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case TAKE_PIC_MENU_ITEM_ID:
                 String intentName = MediaStore.ACTION_IMAGE_CAPTURE;
@@ -87,11 +92,17 @@ public class AlbumActivity extends Activity {
                 }
                 return true;
             case REMINDER_MENU_ITEM_ID:
-                Intent intent = new Intent(this, NotificationSettingActivity.class);
+                intent = new Intent(this, NotificationSettingActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                return true;
+            case android.R.id.home:
+                intent = new Intent(this, AlbumListActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
