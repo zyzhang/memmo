@@ -56,7 +56,9 @@ public class AlbumActivity extends Activity {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            notificationInfo.setText(R.string.msg_reminder_notification + simpleDateFormat.format(calendar.getTimeInMillis()));
+            notificationInfo.setText(R.string.msg_reminder_notification);
+            notificationInfo.append(" ");
+            notificationInfo.append(simpleDateFormat.format(calendar.getTimeInMillis()));
         }
 
         initializeImageList();

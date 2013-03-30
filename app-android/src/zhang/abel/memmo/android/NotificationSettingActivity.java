@@ -60,7 +60,7 @@ public class NotificationSettingActivity extends Activity {
         SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        String key = albumRepository.getAlbumDirectory(currentAlbum).getPath();
+        String key = currentAlbum.getName();
         editor.putLong(key, calendar.getTimeInMillis());
         editor.commit();
     }
