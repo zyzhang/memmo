@@ -26,42 +26,6 @@
                 android:autoText="false"
                 android:capitalize="none"
                 android:gravity="fill_horizontal"/>
-        <TextView
-                android:id="@+id/remarks"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:layout_marginRight="20dip"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/lbl_remark"
-                android:gravity="left"/>
-        <EditText
-                android:id="@+id/txt_remarks"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:layout_marginLeft="20dip"
-                android:layout_marginRight="20dip"
-                android:autoText="false"
-                android:capitalize="none"
-                android:gravity="fill_horizontal"/>
-    <TextView
-            android:id="@+id/reminder"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/menu_reminder"
-            android:gravity="left"/>
-    <EditText
-            android:id="@+id/txt_reminder"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            android:autoText="false"
-            android:capitalize="none"
-            android:gravity="fill_horizontal"/>
 
     <Button
             android:layout_width="fill_parent"

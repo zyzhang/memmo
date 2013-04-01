@@ -70,7 +70,6 @@ public class AlbumCreateActivity extends Activity {
 
     public void createAlbum(View view) {
         EditText txtName = (EditText) findViewById(R.id.txt_name);
-        EditText txtRemarks = (EditText) findViewById(R.id.txt_remarks);//TODO save it into db
 
         String albumName = txtName.getText().toString();
         if (!albumName.isEmpty()) {
