@@ -66,6 +66,12 @@ public class AlbumActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        initializeImageList();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem takePictureMenuItem = menu.add(0, TAKE_PIC_MENU_ITEM_ID, 0, R.string.menu_take_photo);
@@ -83,7 +89,6 @@ public class AlbumActivity extends Activity {
                 String intentName = MediaStore.ACTION_IMAGE_CAPTURE;
                 if (IntentUtils.isIntentAvailable(this, intentName)) {
                     dispatchTakePictureIntent();
-                    initializeImageList();
                 } else {
                     showMessageBox("Can not call the Camera...");
                 }
