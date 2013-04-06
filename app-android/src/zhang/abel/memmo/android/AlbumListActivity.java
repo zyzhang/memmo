@@ -16,11 +16,7 @@ import zhang.abel.memmo.android.adapters.AlbumListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AlbumListActivity extends ListActivity {
     public final static String SER_KEY = "";

@@ -26,10 +26,6 @@ public class AlbumListAdapter extends BaseAdapter {
         this.albums = albums;
     }
 
-//    public AlbumListAdapter(Context context,List<Map<String, Object>> albumList){
-//        this.mInflater = LayoutInflater.from(context);
-//        this.albumList = albumList;
-//    }
     @Override
     public int getCount() {
         // TODO Auto-generated method stub

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import zhang.abel.memmo.android.entities.Picture;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,13 +18,11 @@ import java.util.List;
 public class ImageListAdapter extends BaseAdapter {
 
     private Context context;
-    private String albumPath;
     private List<Bitmap> imageBitmapList;
 
-    public ImageListAdapter(Context context, String albumPath) {
+    public ImageListAdapter(Context context, List<Picture> pictures) {
         this.context = context;
-        this.albumPath = albumPath;
-        initialImageBitmapList();
+        initialImageBitmapList(pictures);
     }
 
     public int getCount() {
@@ -53,40 +52,27 @@ public class ImageListAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private List<Bitmap> initialImageBitmapList() {
+    private void initialImageBitmapList(List<Picture> pictures) {
         imageBitmapList = new ArrayList<Bitmap>();
 
-        File fileDir = new File(albumPath);
-        File[] files = fileDir.listFiles();
-
-        if(files != null){
-            for(File file : files){
-                String fileName = file.getName();
-                if(fileName.lastIndexOf(".") > 0
-                        && fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).equals("jpg")){
-                    Bitmap image =decodeBitmap(albumPath + File.separator + file.getName());
-                    imageBitmapList.add(image);
-                }
-            }
+        for (Picture pic : pictures) {
+            imageBitmapList.add(decodeBitmap(pic.getFile()));
         }
-        return imageBitmapList;
     }
-    public Bitmap decodeBitmap(String path)
-    {
+
+    public Bitmap decodeBitmap(File file) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        Bitmap imageBitmap = BitmapFactory.decodeFile(path, options);
+
         float realWidth = options.outWidth;
         float realHeight = options.outHeight;
         int scale = (int) ((realHeight > realWidth ? realHeight : realWidth) / 100);
-        if (scale <= 0)
-        {
+        if (scale <= 0) {
             scale = 1;
         }
         options.inSampleSize = scale;
         options.inJustDecodeBounds = false;
-        imageBitmap = BitmapFactory.decodeFile(path, options);
 
-        return imageBitmap;
+        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
     }
 }

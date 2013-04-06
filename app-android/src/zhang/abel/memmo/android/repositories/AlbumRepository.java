@@ -39,7 +39,7 @@ public class AlbumRepository {
     public Album get(String albumName) {
         File storageDir = albumStorageFactory.getAlbumStorageDir(albumName);
         if (storageDir.exists() && storageDir.isDirectory()) {
-            return new Album(albumName);
+            return new Album(albumName, storageDir);
         }
         return null;
     }
@@ -60,7 +60,7 @@ public class AlbumRepository {
         });
         ArrayList<Album> results = new ArrayList<Album>();
         for(File dir : dirs) {
-            results.add(new Album(dir.getName()));
+            results.add(new Album(dir.getName(), dir));
         }
         return results;
     }
@@ -71,7 +71,4 @@ public class AlbumRepository {
         }
     }
 
-    public File getAlbumDirectory(Album album) {
-        return albumStorageFactory.getAlbumStorageDir(album.getName());
-    }
 }

@@ -17,11 +17,9 @@ import android.widget.TextView;
 import zhang.abel.memmo.android.adapters.ImageListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
-import zhang.abel.memmo.android.repositories.AlbumRepository;
 import zhang.abel.memmo.android.repositories.PictureRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,7 +34,6 @@ public class AlbumActivity extends Activity {
     private PictureRepository pictureRepository;
     private Picture currentPicture;
     private Album currentAlbum;
-    private AlbumRepository albumRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +42,6 @@ public class AlbumActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        albumRepository = new AlbumRepository();
         pictureRepository = new PictureRepository();
 
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
@@ -164,8 +160,9 @@ public class AlbumActivity extends Activity {
 
     private void initializeImageList() {
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        File albumDirectory = albumRepository.getAlbumDirectory(currentAlbum);
-        ImageListAdapter adapter = new ImageListAdapter(this, albumDirectory.getPath());
+
+        ImageListAdapter adapter = new ImageListAdapter(this, pictureRepository.list(currentAlbum));
+
         adapter.notifyDataSetChanged();
         gridview.invalidateViews();
         gridview.setAdapter(adapter);
@@ -173,7 +170,7 @@ public class AlbumActivity extends Activity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 //TODO view the image
-                showMessageBox("position:" + position);
+                showMessageBox("position:" + position + ";" );
             }
         });
     }

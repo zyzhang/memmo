@@ -2,6 +2,7 @@ package zhang.abel.memmo.android.repositories;
 
 import android.net.Uri;
 import android.os.Build;
+import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
 import zhang.abel.memmo.android.factories.AlbumStorageDirFactory;
 import zhang.abel.memmo.android.factories.BaseAlbumDirFactory;
@@ -9,9 +10,10 @@ import zhang.abel.memmo.android.factories.FroyoAlbumDirFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PictureRepository {
-    private static final String PICTURE_FILE_EXT = ".jpg";
     private final AlbumStorageDirFactory albumStorageFactory;
 
     public PictureRepository() {
@@ -23,15 +25,21 @@ public class PictureRepository {
     }
 
     public void save(Picture picture) throws IOException {
-        getPictureFile(picture).createNewFile();
-    }
-
-    private File getPictureFile(Picture picture) {
-        File albumDir = albumStorageFactory.getAlbumStorageDir(picture.getAlbum().getName());
-        return new File(albumDir, picture.getPictureName() + PICTURE_FILE_EXT);
+        picture.getFile().createNewFile();
     }
 
     public Uri getUri(Picture currentPicture) {
-        return Uri.fromFile(getPictureFile(currentPicture));
+        return Uri.fromFile(currentPicture.getFile());
+    }
+
+    public List<Picture> list(Album album) {
+        ArrayList<Picture> pictures = new ArrayList<Picture>();
+
+        File[] pictureFiles = album.getDirectory().listFiles();
+        for (File file : pictureFiles) {
+            pictures.add(new Picture(album, file.getName(), file));
+        }
+
+        return pictures;
     }
 }
