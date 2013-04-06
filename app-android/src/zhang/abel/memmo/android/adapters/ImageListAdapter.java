@@ -19,6 +19,7 @@ public class ImageListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Bitmap> imageBitmapList;
+    private List<Picture> pictures;
 
     public ImageListAdapter(Context context, List<Picture> pictures) {
         this.context = context;
@@ -53,6 +54,7 @@ public class ImageListAdapter extends BaseAdapter {
     }
 
     private void initialImageBitmapList(List<Picture> pictures) {
+        this.pictures = pictures;
         imageBitmapList = new ArrayList<Bitmap>();
 
         for (Picture pic : pictures) {
@@ -74,5 +76,9 @@ public class ImageListAdapter extends BaseAdapter {
         options.inJustDecodeBounds = false;
 
         return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+    }
+
+    public Picture getPicture(int position) {
+        return this.pictures.get(position);
     }
 }

@@ -1,5 +1,7 @@
 package zhang.abel.memmo.android.entities;
 
+import android.net.Uri;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,4 +32,7 @@ public class Picture {
         return file;
     }
 
+    public Uri fileUri() {
+        return Uri.fromFile(file);
+    }
 }

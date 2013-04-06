@@ -161,7 +161,7 @@ public class AlbumActivity extends Activity {
     private void initializeImageList() {
         GridView gridview = (GridView) findViewById(R.id.gridview);
 
-        ImageListAdapter adapter = new ImageListAdapter(this, pictureRepository.list(currentAlbum));
+        final ImageListAdapter adapter = new ImageListAdapter(this, pictureRepository.list(currentAlbum));
 
         adapter.notifyDataSetChanged();
         gridview.invalidateViews();
@@ -169,8 +169,9 @@ public class AlbumActivity extends Activity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                //TODO view the image
-                showMessageBox("position:" + position + ";" );
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(adapter.getPicture(position).fileUri(), "image/*");
+                startActivity(intent);
             }
         });
     }
