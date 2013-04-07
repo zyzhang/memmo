@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,7 +86,6 @@ public class AlbumActivity extends Activity {
                 String intentName = MediaStore.ACTION_IMAGE_CAPTURE;
                 if (IntentUtils.isIntentAvailable(this, intentName)) {
                     dispatchTakePictureIntent();
-                    initializeImageList();
                 } else {
                     showMessageBox("Can not call the Camera...");
                 }
@@ -124,6 +126,12 @@ public class AlbumActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        initializeImageList();
+        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
             Intent intent = new Intent(this, AlbumListActivity.class);
@@ -150,7 +158,20 @@ public class AlbumActivity extends Activity {
             }
             currentPicture = new Picture(currentAlbum);
             pictureRepository.save(currentPicture);
+
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureRepository.getUri(currentPicture));
+
+            String pictureFile = currentPicture.getFile().toString();
+            MediaScannerConnection.scanFile(this,
+                    new String[] {pictureFile}, null,
+                    new MediaScannerConnection.OnScanCompletedListener(){
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+                            Log.i("ExternalStorage", "scanned" + path + ":");
+                            Log.i("ExternalStorage", "-> uri = " + uri);
+                        }
+                    }
+            );
 
             startActivityForResult(takePictureIntent, ACTION_TAKE_PIC);
         } catch (IOException e) {
