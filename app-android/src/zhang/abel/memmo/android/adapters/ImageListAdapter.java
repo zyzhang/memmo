@@ -70,7 +70,7 @@ public class ImageListAdapter extends BaseAdapter {
         float realHeight = options.outHeight;
         int scale = (int) ((realHeight > realWidth ? realHeight : realWidth) / 100);
         if (scale <= 0) {
-            scale = 1;
+            scale = 5;
         }
         options.inSampleSize = scale;
         options.inJustDecodeBounds = false;
