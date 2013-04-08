@@ -9,19 +9,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import zhang.abel.memmo.android.entities.Album;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class NotificationReceiver extends BroadcastReceiver {
     private int id;
     private String info;
+    private ArrayList<Integer> selectDays;
     private Album currentAlbum;
 
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         id = bundle.getInt("id");
         info = bundle.getString("info");
+        selectDays = bundle.getIntegerArrayList("selectDays");
         currentAlbum = (Album) bundle.getSerializable(AlbumListActivity.SER_KEY);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(id, buildNotification(context));
+        Calendar calendar = Calendar.getInstance();
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        if(selectDays.contains(dayOfWeek)){
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(id, buildNotification(context));
+        }
     }
 
     private Notification buildNotification(Context context) {

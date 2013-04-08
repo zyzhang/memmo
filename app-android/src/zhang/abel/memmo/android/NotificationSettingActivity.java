@@ -1,9 +1,7 @@
 package zhang.abel.memmo.android;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
+import android.app.*;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +9,9 @@ import android.widget.TimePicker;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class NotificationSettingActivity extends Activity {
@@ -22,13 +22,11 @@ public class NotificationSettingActivity extends Activity {
     private AlarmManager alarmManager;
     private Calendar calendar;
     private Album currentAlbum;
-    private AlbumRepository albumRepository;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albumlist);
 
-        albumRepository = new AlbumRepository();
         currentAlbum = (Album) getIntent().getSerializableExtra(AlbumListActivity.SER_KEY);
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -38,21 +36,55 @@ public class NotificationSettingActivity extends Activity {
         int minute = calendar.get(Calendar.MINUTE);
         new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        setCalendar(hourOfDay, minute);
-                        alarmManager.setRepeating(
-                                AlarmManager.RTC_WAKEUP,
-                                calendar.getTimeInMillis(),
-                                NOTIFICATION_INTERVAL,
-                                getPendingIntent()
-                        );
-                        SaveNotificationInfo(calendar);
-                        Intent intent = new Intent(NotificationSettingActivity.this, AlbumActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        setTime(hourOfDay, minute);
                     }
                 }, hourOfDay, minute, true).show();
+    }
+
+    private void setTime(int hour, int min) {
+        final int hourOfDay = hour;
+        final int minute = min;
+        final String[] days = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+        final boolean [] selectDays = new boolean[] { false, false, false, false, false, false, false };
+
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Select Day")
+                .setMultiChoiceItems(days, selectDays, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        selectDays[which] = isChecked;
+                    }
+                })
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    ArrayList<Integer> intDays = new ArrayList<Integer>();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int index = 0; index < selectDays.length; index++) {
+                            if (selectDays[index]) {
+                                intDays.add(index + 1);
+                            }
+                        }
+                        doSetting(hourOfDay, minute, intDays);
+                    }
+                })
+                .create();
+        dialog.show();
+    }
+
+    private void doSetting(int hourOfDay, int minute, ArrayList<Integer> intDays) {
+        setCalendar(hourOfDay, minute);
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                NOTIFICATION_INTERVAL,
+                getPendingIntent(intDays)
+        );
+        SaveNotificationInfo(calendar);
+        Intent intent = new Intent(this, AlbumActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private void SaveNotificationInfo(Calendar calendar) {
@@ -65,9 +97,9 @@ public class NotificationSettingActivity extends Activity {
         editor.commit();
     }
 
-    private PendingIntent getPendingIntent() {
+    private PendingIntent getPendingIntent(ArrayList<Integer> intDays) {
         Intent intent = new Intent(this, NotificationReceiver.class);
-        intent.putExtras(setNotificationBundle());
+        intent.putExtras(setNotificationBundle(intDays));
         return PendingIntent.getBroadcast(NotificationSettingActivity.this, NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -79,11 +111,12 @@ public class NotificationSettingActivity extends Activity {
         calendar.set(Calendar.MILLISECOND, 0);
     }
 
-    private Bundle setNotificationBundle() {
+    private Bundle setNotificationBundle(ArrayList<Integer> intDays) {
         Bundle bundle = new Bundle();
         bundle.putString("info", NOTIFICATION_CONTENT);
         bundle.putInt("id", NOTIFICATION_ID);
         bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
+        bundle.putIntegerArrayList("selectDays", intDays);
         return bundle;
     }
 
