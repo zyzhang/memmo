@@ -27,4 +27,9 @@
     <string name="exit_msg">Are you sure want to exit Memmo</string>
     <string name="exit_ok">Ok</string>
     <string name="exit_cancel">Cancel</string>
+
+    <!--Reminder-->
+    <string name="reminder_set_day_title">Set day</string>
+    <string name="reminder_set_day_done">Done</string>
+
 </resources>

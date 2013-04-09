@@ -44,18 +44,18 @@ public class NotificationSettingActivity extends Activity {
     private void setTime(int hour, int min) {
         final int hourOfDay = hour;
         final int minute = min;
-        final String[] days = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+        final String[] days = getResources().getStringArray(R.array.days);
         final boolean [] selectDays = new boolean[] { false, false, false, false, false, false, false };
 
         Dialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Select Day")
+                .setTitle(R.string.reminder_set_day_title)
                 .setMultiChoiceItems(days, selectDays, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         selectDays[which] = isChecked;
                     }
                 })
-                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.reminder_set_day_done, new DialogInterface.OnClickListener() {
                     ArrayList<Integer> intDays = new ArrayList<Integer>();
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
