@@ -21,6 +21,7 @@
     <!--Menu-->
     <string name="menu_take_photo">Take Photo</string>
     <string name="menu_reminder">Reminder</string>
+    <string name="menu_gif">GIF</string>
 
     <!--Exit-->
     <string name="exit_title">Notice</string>

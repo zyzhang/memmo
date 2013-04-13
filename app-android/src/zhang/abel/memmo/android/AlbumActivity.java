@@ -20,17 +20,21 @@ import android.widget.TextView;
 import zhang.abel.memmo.android.adapters.ImageListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.entities.Picture;
+import zhang.abel.memmo.android.gif.JpgToGif;
 import zhang.abel.memmo.android.repositories.PictureRepository;
 import zhang.abel.memmo.android.utils.IntentUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 public class AlbumActivity extends Activity {
 
     public static final int TAKE_PIC_MENU_ITEM_ID = 1;
     public static final int REMINDER_MENU_ITEM_ID = 2;
+    private static final int GIF_MENU_ITEM_ID = 3;
 
     private static final int ACTION_TAKE_PIC = 11;
 
@@ -54,7 +58,7 @@ public class AlbumActivity extends Activity {
         TextView notificationInfo = (TextView) findViewById(R.id.notificationinfo);
         String prefName = "notification";
         SharedPreferences pref = getSharedPreferences(prefName, MODE_PRIVATE);
-        if(pref.contains(currentAlbum.getName())) {
+        if (pref.contains(currentAlbum.getName())) {
 
             Long time = pref.getLong(currentAlbum.getName(), 0);
             Calendar calendar = Calendar.getInstance();
@@ -73,8 +77,11 @@ public class AlbumActivity extends Activity {
         super.onCreateOptionsMenu(menu);
         MenuItem takePictureMenuItem = menu.add(0, TAKE_PIC_MENU_ITEM_ID, 0, R.string.menu_take_photo);
         MenuItem reminderMenuItem = menu.add(0, REMINDER_MENU_ITEM_ID, 1, R.string.menu_reminder);
+//        MenuItem gifMenuItem = menu.add(0, GIF_MENU_ITEM_ID, 2, R.string.menu_gif);
+
         takePictureMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         reminderMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+//        gifMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
     }
 
@@ -96,6 +103,16 @@ public class AlbumActivity extends Activity {
                 bundle.putSerializable(AlbumListActivity.SER_KEY, currentAlbum);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                return true;
+            case GIF_MENU_ITEM_ID:
+                List<Picture> pictures = pictureRepository.list(currentAlbum);
+                String[] files = new String[pictures.size()];
+                for (int i = 0; i < pictures.size(); i++) {
+                    files[i] = pictures.get(i).getFile().getAbsolutePath();
+                }
+                String gifPath = new File(currentAlbum.getDirectory(), "test.gif").getAbsolutePath();
+                Log.i("Album", "Generating GIF to " + gifPath);
+                JpgToGif.jpgToGif(files, gifPath);
                 return true;
             case android.R.id.home:
                 intent = new Intent(this, AlbumListActivity.class);
@@ -163,8 +180,8 @@ public class AlbumActivity extends Activity {
 
             String pictureFile = currentPicture.getFile().toString();
             MediaScannerConnection.scanFile(this,
-                    new String[] {pictureFile}, null,
-                    new MediaScannerConnection.OnScanCompletedListener(){
+                    new String[]{pictureFile}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
                         @Override
                         public void onScanCompleted(String path, Uri uri) {
                             Log.i("ExternalStorage", "scanned" + path + ":");
