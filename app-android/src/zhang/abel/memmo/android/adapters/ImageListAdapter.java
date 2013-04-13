@@ -62,7 +62,7 @@ public class ImageListAdapter extends BaseAdapter {
         }
     }
 
-    public Bitmap decodeBitmap(File file) {
+    private Bitmap decodeBitmap(File file) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
