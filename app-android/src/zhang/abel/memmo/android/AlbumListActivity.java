@@ -7,10 +7,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.ListView;
 import zhang.abel.memmo.android.adapters.AlbumListAdapter;
 import zhang.abel.memmo.android.entities.Album;
@@ -31,9 +28,48 @@ public class AlbumListActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         renderAlbumListPage();
+
+        ListView listView = getListView();
+        listView.setOnTouchListener(new View.OnTouchListener() {
+
+            float x, y, upx, upy;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    x = event.getX();
+                    y = event.getY();
+                }
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    upx = event.getX();
+                    upy = event.getY();
+
+                    int position1 = ((ListView) v).pointToPosition((int) x, (int) y);
+                    int position2 = ((ListView) v).pointToPosition((int) upx,(int) upy);
+                    if (position1 == position2 && Math.abs(x - upx) > 10) {
+                        v = ((ListView) v).getChildAt(position1);
+                        removeListItem(v,position1);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
-    @Override
+    protected void removeListItem(View rowView, final int position) {
+        albums.remove(position);
+        //TODO: need to delete the album folder and all photos inside it.
+        //Create dialog to confirm with user whether he wants to delete or not
+        runOnUiThread(new Runnable() {
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+
+        @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem create = menu.add(0, 1, 0, R.string.btn_create);
