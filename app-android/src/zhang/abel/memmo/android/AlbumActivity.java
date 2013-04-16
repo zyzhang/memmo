@@ -76,7 +76,9 @@ public class AlbumActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem takePictureMenuItem = menu.add(0, TAKE_PIC_MENU_ITEM_ID, 0, R.string.menu_take_photo);
+        takePictureMenuItem.setIcon(R.drawable.ic_menu_camera);
         MenuItem reminderMenuItem = menu.add(0, REMINDER_MENU_ITEM_ID, 1, R.string.menu_reminder);
+        reminderMenuItem.setIcon(R.drawable.ic_menu_alarm);
 //        MenuItem gifMenuItem = menu.add(0, GIF_MENU_ITEM_ID, 2, R.string.menu_gif);
 
         takePictureMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);

@@ -32,23 +32,29 @@ public class AlbumListActivity extends ListActivity {
         ListView listView = getListView();
         listView.setOnTouchListener(new View.OnTouchListener() {
 
-            float x, y, upx, upy;
+            float x
+                    ,
+                    y
+                    ,
+                    upx
+                    ,
+                    upy;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     x = event.getX();
                     y = event.getY();
                 }
-                if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     upx = event.getX();
                     upy = event.getY();
 
                     int position1 = ((ListView) v).pointToPosition((int) x, (int) y);
-                    int position2 = ((ListView) v).pointToPosition((int) upx,(int) upy);
+                    int position2 = ((ListView) v).pointToPosition((int) upx, (int) upy);
                     if (position1 == position2 && Math.abs(x - upx) > 10) {
                         v = ((ListView) v).getChildAt(position1);
-                        removeListItem(v,position1);
+                        removeListItem(v, position1);
                     }
                 }
                 return false;
@@ -68,12 +74,13 @@ public class AlbumListActivity extends ListActivity {
     }
 
 
-
-        @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuItem create = menu.add(0, 1, 0, R.string.btn_create);
+
         MenuItem edit = menu.add(0, 2, 1, R.string.edit);
+
         create.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         edit.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return true;
