@@ -76,7 +76,9 @@ public class AlbumCreateActivity extends Activity {
             albumRepository.create(new Album(albumName));
         }
 
-        Intent intent = new Intent(AlbumCreateActivity.this, AlbumListActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent();
+        intent.putExtra("result", "album created successful");
+        this.setResult(RESULT_OK, intent);
+        this.finish();
     }
 }

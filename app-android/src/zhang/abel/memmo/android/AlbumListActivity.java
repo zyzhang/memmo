@@ -6,7 +6,9 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.ListView;
 import zhang.abel.memmo.android.adapters.AlbumListAdapter;
@@ -29,6 +31,10 @@ public class AlbumListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         renderAlbumListPage();
 
+
+    }
+
+    private void AddDeleteListener() {
         ListView listView = getListView();
         listView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -91,7 +97,8 @@ public class AlbumListActivity extends ListActivity {
         switch (item.getItemId()) {
             case 1:
                 Intent intent = new Intent(this, AlbumCreateActivity.class);
-                startActivity(intent);
+//                startActivity(intent);
+                startActivityForResult(intent, 1);
                 return true;
             case 2:
                 //The Edit logic.
@@ -99,6 +106,13 @@ public class AlbumListActivity extends ListActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String result = data.getExtras().getString("result");
+        renderAlbumListPage();
+        super.onActivityResult(requestCode, resultCode, data);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
@@ -142,6 +156,7 @@ public class AlbumListActivity extends ListActivity {
         albums = albumRepository.list();
         initAlbumList(albums, false);
         showActionBar();
+        AddDeleteListener();
     }
 
     private void initAlbumList(List<Album> albumList, boolean isRefresh) {
