@@ -1,4 +1,4 @@
 memmo
 =======
 
-Images to record your life!
+Images to record your life.
