@@ -1,4 +1,4 @@
-imemory
+memmo
 =======
 
 Images to record your life.
