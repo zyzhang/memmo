@@ -27,4 +27,8 @@
     <string name="exit_msg">确定退出萌好瞬间吗</string>
     <string name="exit_ok">确定</string>
     <string name="exit_cancel">取消</string>
+
+    <!--Delete-->
+    <string name="delete_album_title">删除相册</string>
+    <string name="delete_album_message">确定删除此相册？</string>
 </resources>

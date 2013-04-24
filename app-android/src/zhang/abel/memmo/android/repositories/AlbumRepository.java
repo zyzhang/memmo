@@ -71,4 +71,14 @@ public class AlbumRepository {
         }
     }
 
+    public void delete(Album album) {
+        File storageDir = albumStorageFactory.getAlbumStorageDir(album.getName());
+        if (storageDir.exists() && storageDir.isDirectory()) {
+            File[] photosInAlbum = storageDir.listFiles();
+            for(File photo : photosInAlbum){
+                 photo.delete();
+            }
+        }
+        storageDir.delete();
+    }
 }

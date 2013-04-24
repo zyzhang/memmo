@@ -15,6 +15,7 @@ import zhang.abel.memmo.android.adapters.AlbumListAdapter;
 import zhang.abel.memmo.android.entities.Album;
 import zhang.abel.memmo.android.repositories.AlbumRepository;
 
+import java.io.File;
 import java.util.List;
 
 public class AlbumListActivity extends ListActivity {
@@ -69,14 +70,33 @@ public class AlbumListActivity extends ListActivity {
     }
 
     protected void removeListItem(View rowView, final int position) {
-        albums.remove(position);
-        //TODO: need to delete the album folder and all photos inside it.
-        //Create dialog to confirm with user whether he wants to delete or not
-        runOnUiThread(new Runnable() {
-            public void run() {
-                adapter.notifyDataSetChanged();
-            }
-        });
+
+        Dialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_album_title)
+                .setMessage(R.string.delete_album_message)
+                .setPositiveButton(R.string.exit_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Album currentAlbum = albums.get(position);
+                        albums.remove(position);
+                        albumRepository.delete(currentAlbum);
+
+                        //TODO: need to delete the album folder and all photos inside it.
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                })
+                .setNeutralButton(R.string.exit_cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialog.show();
+
     }
 
 
